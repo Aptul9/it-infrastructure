@@ -1,0 +1,22 @@
+metallb:
+  enabled: {{ .Values.installed.metalLB }}
+  ipAddressPool:
+    name: default-pool
+    ipRange:
+      start: 192.168.1.240
+      end: 192.168.1.250
+
+datadog:
+  enabled: {{ .Values.installed.datadog }}
+  clusterName: adarte
+  credentials:
+    apiKey: "8f90dfc3d260ce1975271fd65d8f7570"
+  apm:
+    enabledNamespaces:
+      - adarte-prod-integration
+      - adarte-prod-portal-be
+      - adarte-prod-cms-web
+      - adarte-prod-batch
+      - adarte-prod-cca-be
+  tags:
+    - env:prod

@@ -1,0 +1,5 @@
+cr:
+  create: true
+  spec:
+    auth:
+      strategy: "anonymous"

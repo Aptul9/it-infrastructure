@@ -1,0 +1,12 @@
+persistence:
+  enabled: true
+  storageClass: {{ .Values.defaultStorageClass }}
+# ingress non funziona, va settato a mano
+ingress:
+  enabled: true
+  hosts:
+    - nifi.local
+auth:
+  singleUser:
+    username: admin
+    password: "fxyXr0M7ip44" #almeno 12 caratteri

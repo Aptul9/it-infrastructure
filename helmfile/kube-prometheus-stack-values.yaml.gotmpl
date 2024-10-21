@@ -1,0 +1,51 @@
+grafana:
+  persistence:
+    enabled: true
+    type: sts
+    storageClassName: {{ .Values.defaultStorageClass }}
+    accessModes:
+      - ReadWriteOnce
+    size: 20Gi
+    finalizers:
+      - kubernetes.io/pvc-protection
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hosts: 
+      - grafana.local
+prometheus:
+  prometheusSpec:
+    routePrefix: /
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: {{ .Values.defaultStorageClass }}
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 50Gi
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - prometheus.local
+    paths:
+      - /
+alertmanager:
+  alertmanagerSpec:
+    routePrefix: /
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: {{ .Values.defaultStorageClass }}
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - alertmanager.local
+    paths:
+      - /

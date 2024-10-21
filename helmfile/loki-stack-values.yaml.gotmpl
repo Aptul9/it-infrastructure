@@ -1,0 +1,17 @@
+loki:
+  image:
+    tag: 2.9.3
+  persistence:
+    enabled: true
+    size: 10Gi
+  storageClassName: {{ .Values.defaultStorageClass }}
+  config:
+    compactor:
+      retention_enabled: true
+      compaction_interval: 10m
+      retention_delete_delay: 1h
+      retention_delete_worker_count: 150
+      delete_request_store: filesystem
+    limits_config:
+      retention_period: 24h
+      reject_old_samples_max_age: 24h

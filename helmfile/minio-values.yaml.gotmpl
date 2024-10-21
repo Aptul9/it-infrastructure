@@ -1,0 +1,9 @@
+mode: distributed
+ingress:
+  enabled: true
+  hostname: minio.local
+global:
+  defaultStorageClass:: {{ .Values.defaultStorageClass }}
+auth:
+  rootUser: admin
+  rootPassword: password
