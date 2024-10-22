@@ -1,0 +1,5 @@
+global:
+  defaultStorageClass: {{ .Values.defaultStorageClass }}
+#per evitare che venga rideployato ogni volta, c'è bisogno di avere installato cert-manager con tutte le crd: 
+#helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.6.3 --set installCRDs=true
+useCertManager: true 

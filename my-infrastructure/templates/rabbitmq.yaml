@@ -1,0 +1,18 @@
+{{- if .Values.rabbitMQ.enabled }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: rabbit
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbitmqcluster
+  namespace: rabbit
+spec:
+  replicas: 1
+  rabbitmq:
+    additionalConfig: |
+      default_user=admin
+      default_pass=password
+{{- end }}

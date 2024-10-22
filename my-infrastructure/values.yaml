@@ -1,5 +1,5 @@
 metallb:
-  enabled: {{ .Values.installed.metalLB }}
+  enabled: true
   ipAddressPool:
     name: default-pool
     ipRange:
@@ -7,7 +7,7 @@ metallb:
       end: 192.168.1.250
 
 datadog:
-  enabled: {{ .Values.installed.datadog }}
+  enabled: true
   clusterName: adarte
   credentials:
     apiKey: "8f90dfc3d260ce1975271fd65d8f7570"
@@ -20,3 +20,6 @@ datadog:
       - adarte-prod-cca-be
   tags:
     - env:prod
+
+rabbitMQ:
+  enabled: true
