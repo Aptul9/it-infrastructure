@@ -1,0 +1,14 @@
+image:
+  tag: v1.11.0-release
+
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 250m
+  limits:
+    memory: 256Mi
+    cpu: 250m
+
+#namespaces that the operator will monitor and where we can install the cluster, others will be ignored
+namespaces:
+  - "nifi"

@@ -1,0 +1,43 @@
+global:
+  ingress:
+    enabled: true
+    host: camunda.local
+  identity:
+    auth:
+      tasklist:
+        existingSecret: jfKEFOEwyF
+      optimize:
+        existingSecret: jfKEFOEwyF
+      operate:
+        existingSecret: jfKEFOEwyF
+      connectors:
+        existingSecret: jfKEFOEwyF
+      zeebe:
+        existingSecret: jfKEFOEwyF
+      console:
+        existingSecret: jfKEFOEwyF
+      postgresql:
+        auth:
+          postgresPassword: jfKEFOEwyF
+zeebe:
+  pvcStorageClassName: {{ .Values.defaultStorageClass }}
+  image:
+    tag: 8.5.8
+zeebeGateway:
+  image: 
+    tag: 8.5.8
+  ingress:
+    grpc:
+      enabled: true
+      host: "zeebe-grpc.local"
+    rest:
+      enabled: true
+      host: "zeebe-rest.local"
+identity:
+  keycloak:
+    auth:
+      adminPassword: jfKEFOEwyF
+      managementPassword: jfKEFOEwyF
+    postgresql:
+      auth:
+        password: jfKEFOEwyF

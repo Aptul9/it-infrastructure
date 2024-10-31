@@ -1,6 +1,7 @@
 defaultStorageClass: standard
 installed:
   ingressNginx: true
+  certManager: true
   metalLB: false
   istio: false
   kiali: false
@@ -9,11 +10,12 @@ installed:
   prometheusStack: false
   jaeger: false
   opentelemetry: false
-  rabbitMQ: true
+  rabbitMQ: false
   redis: false
   mongoDB: false
   minio: false
   datadog: false
   nifi: false
-  camunda: false
+  camunda: true
   tika: false
+  nifikop: true

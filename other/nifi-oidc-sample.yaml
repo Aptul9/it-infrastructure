@@ -1,0 +1,264 @@
+apiVersion: nifi.konpyutaika.com/v1
+ kind: NifiCluster
+ metadata:
+   name: nifikop
+   namespace: instances
+ spec:
+   clusterImage: apache/nifi:2.0.0-M4
+   nodeUserIdentityTemplate: node-%d-nifikop
+   externalServices:
+     - name: nifikop
+       spec:
+         portConfigs:
+           - internalListenerName: https
+             port: 443
+           - internalListenerName: prometheus
+             port: 9092
+           - internalListenerName: s2s
+             port: 10000
+         type: ClusterIP
+   listenersConfig:
+     internalListeners:
+       - containerPort: 8443
+         name: https
+         type: https
+       - containerPort: 6007
+         name: cluster
+         type: cluster
+       - containerPort: 10000
+         name: s2s
+         type: s2s
+       - containerPort: 9092
+         name: prometheus
+         type: prometheus
+     sslSecrets:
+       create: true
+       tlsSecretName: nifikop-tls
+   nifiClusterTaskSpec:
+     retryDurationMinutes: 10
+   managedAdminUsers:
+     - identity: julien.guitton@nifikop.com
+       name: juguitton
+   nodeConfigGroups:
+     default_group:
+       fsGroup: 1337
+       isNode: true
+       nodeSelector:
+         node_pool: instances-pool
+       resourcesRequirements:
+         limits:
+           cpu: "6"
+           memory: 6Gi
+         requests:
+           cpu: "6"
+           memory: 5Gi
+       serviceAccountName: nifikop-cluster
+       storageConfigs:
+         - mountPath: /opt/nifi/nifi-current/logs
+           name: logs
+           pvcSpec:
+             accessModes:
+               - ReadWriteOnce
+             resources:
+               requests:
+                 storage: 50Gi
+             storageClassName: ssd-wait
+         - mountPath: /opt/nifi/data
+           name: data
+           pvcSpec:
+             accessModes:
+               - ReadWriteOnce
+             resources:
+               requests:
+                 storage: 5Gi
+             storageClassName: ssd-wait
+         - mountPath: /opt/nifi/flowfile_repository
+           name: flowfile-repository
+           pvcSpec:
+             accessModes:
+               - ReadWriteOnce
+             resources:
+               requests:
+                 storage: 12Gi
+             storageClassName: ssd-wait
+         - mountPath: /opt/nifi/nifi-current/conf
+           name: conf
+           pvcSpec:
+             accessModes:
+               - ReadWriteOnce
+             resources:
+               requests:
+                 storage: 5Gi
+             storageClassName: ssd-wait
+         - mountPath: /opt/nifi/content_repository
+           name: content-repository-default
+           pvcSpec:
+             accessModes:
+               - ReadWriteOnce
+             resources:
+               requests:
+                 storage: 10Gi
+             storageClassName: ssd-wait
+         - mountPath: /opt/nifi/content-additional/rep1
+           name: content-repository-rep1
+           pvcSpec:
+             accessModes:
+               - ReadWriteOnce
+             resources:
+               requests:
+                 storage: 35Gi
+             storageClassName: ssd-wait
+         - mountPath: /opt/nifi/content-additional/rep2
+           name: content-repository-rep2
+           pvcSpec:
+             accessModes:
+               - ReadWriteOnce
+             resources:
+               requests:
+                 storage: 35Gi
+             storageClassName: ssd-wait
+         - mountPath: /opt/nifi/provenance_repository
+           name: provenance-repository-default
+           pvcSpec:
+             accessModes:
+               - ReadWriteOnce
+             resources:
+               requests:
+                 storage: 10Gi
+             storageClassName: ssd-wait
+         - mountPath: /opt/nifi/provenance-additional/rep1
+           name: provenance-repository-rep1
+           pvcSpec:
+             accessModes:
+               - ReadWriteOnce
+             resources:
+               requests:
+                 storage: 12Gi
+             storageClassName: ssd-wait
+         - mountPath: /opt/nifi/provenance-additional/rep2
+           name: provenance-repository-rep2
+           pvcSpec:
+             accessModes:
+               - ReadWriteOnce
+             resources:
+               requests:
+                 storage: 12Gi
+             storageClassName: ssd-wait
+         - mountPath: /opt/nifi/extensions
+           name: extensions-repository
+           pvcSpec:
+             accessModes:
+               - ReadWriteOnce
+             resources:
+               requests:
+                 storage: 5Gi
+             storageClassName: ssd-wait
+       tolerations:
+         - effect: NoExecute
+           key: dedicated
+           operator: Equal
+           value: instances
+   nodes:
+     - id: 0
+       labels:
+         nifi_cr: nifikop
+         nifi_node_group: default_group
+       nodeConfigGroup: default_group
+   pod:
+     annotations:
+       cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+   propagateLabels: false
+   readOnlyConfig:
+     bootstrapProperties:
+       nifiJvmMemory: 4g
+       overrideConfigs: |
+         # Java 8 Tuning see https://community.hortonworks.com/articles/7882/hdfnifi-best-practices-for-setting-up-a-high-perfo.html for references
+         java.arg.7=-XX:ReservedCodeCacheSize=256m
+         java.arg.8=-XX:+UseCodeCacheFlushing
+     logbackConfig:
+       replaceConfigMap:
+         data: logback.xml
+         name: nifi-config
+         namespace: nifikop-system
+     maximumTimerDrivenThreadCount: 40
+     nifiProperties:
+       overrideConfigMap:
+         data: nifi.properties
+         name: nifi-config
+         namespace: nifikop-system
+       overrideConfigs: |
+         nifi.nar.library.autoload.directory=../extensions
+         nifi.security.user.oidc.discovery.url=https://accounts.google.com/.well-known/openid-configuration
+         nifi.security.user.oidc.client.id=<HIDE>
+         nifi.security.user.oidc.client.secret=<HIDE>
+         nifi.security.identity.mapping.pattern.dn=CN=([^,]*)(?:, (?:O|OU)=.*)?
+         nifi.security.identity.mapping.value.dn=$1
+         nifi.security.identity.mapping.transform.dn=NONE
+         nifi.content.repository.directory.rep1=../content-additional/rep1
+         nifi.content.repository.directory.rep2=../content-additional/rep2
+         nifi.provenance.repository.directory.rep1=../provenance-additional/rep1
+         nifi.provenance.repository.directory.rep2=../provenance-additional/rep2
+         nifi.sensitive.props.key=nifikopnifikopnifikop
+       overrideSecretConfig:
+         data: nifi.properties
+         name: nifi-properties-secret
+         namespace: nifikop-system
+       webProxyHosts:
+         - nifikop.com:443
+         - nifikop.com
+   service:
+     headlessEnabled: true
+   sidecarConfigs:
+     - args:
+         - tail
+         - -n+1
+         - -F
+         - /var/log/nifi-app.log
+       image: busybox:1.36
+       name: app-log
+       resources:
+         limits:
+           cpu: 50m
+           memory: 50Mi
+         requests:
+           cpu: 50m
+           memory: 50Mi
+       volumeMounts:
+         - mountPath: /var/log
+           name: logs
+     - args:
+         - tail
+         - -n+1
+         - -F
+         - /var/log/nifi-bootstrap.log
+       image: busybox:1.36
+       name: bootstrap-log
+       resources:
+         limits:
+           cpu: 50m
+           memory: 50Mi
+         requests:
+           cpu: 50m
+           memory: 50Mi
+       volumeMounts:
+         - mountPath: /var/log
+           name: logs
+     - args:
+         - tail
+         - -n+1
+         - -F
+         - /var/log/nifi-user.log
+       image: busybox:1.36
+       name: user-log
+       resources:
+         limits:
+           cpu: 50m
+           memory: 50Mi
+         requests:
+           cpu: 50m
+           memory: 50Mi
+       volumeMounts:
+         - mountPath: /var/log
+           name: logs
+   zkAddress: zookeeper.zookeeper:2181
+   zkPath: /nifikop-instances

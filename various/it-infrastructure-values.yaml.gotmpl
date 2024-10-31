@@ -22,4 +22,7 @@ datadog:
     - env:prod
 
 rabbitMQ:
-  enabled: {{ .Values.installed.datadog }}
+  enabled: {{ .Values.installed.rabbitMQ }}
+
+nifi:
+  enabled: {{ .Values.installed.nifikop }}

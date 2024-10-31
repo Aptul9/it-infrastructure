@@ -4,6 +4,7 @@ kind: Namespace
 metadata:
   name: rabbit
 ---
+# per altri esempi su come configurare: https://github.com/rabbitmq/cluster-operator/tree/main/docs/examples
 apiVersion: rabbitmq.com/v1beta1
 kind: RabbitmqCluster
 metadata:

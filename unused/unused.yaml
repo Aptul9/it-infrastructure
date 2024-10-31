@@ -1,0 +1,79 @@
+repositories:
+  # - name: jaegertracing
+  #   url: https://jaegertracing.github.io/helm-charts
+  # - name: opentelemetry
+  #   url: https://open-telemetry.github.io/opentelemetry-helm-charts
+  # - name: istio
+  #   url: https://istio-release.storage.googleapis.com/charts
+  # - name: kiali
+  #   url: https://kiali.org/helm-charts
+  # - name: datadog
+  #   url: https://helm.datadoghq.com
+  # - name: cetic #apache nifi
+  #   url: https://cetic.github.io/helm-charts
+
+releases:
+
+#   - name: jaeger
+#     namespace: tracing
+#     chart: jaegertracing/jaeger
+#     version: 3.2.0
+#     installed: {{ .Values.installed.jaeger }}
+#     values:
+#       - jaeger-values.yaml
+#     {{- if .Values.installed.longhorn }}
+#     needs:
+#       - longhorn-system/longhorn
+#     {{- end }}
+
+#   - name: opentelemetry-collector
+#     namespace: tracing
+#     chart: opentelemetry/opentelemetry-collector
+#     version: 0.104.0
+#     installed: {{ and .Values.installed.jaeger .Values.installed.opentelemetry }}
+#     values:
+#       - opentelemetry-collector-values.yaml
+#     needs:
+#       - tracing/jaeger
+
+#   - name: istio-base
+#     namespace: istio-system
+#     chart: istio/base
+#     version: 1.23.0
+#     installed: {{ .Values.installed.istio }}
+#     values:
+#       - istio-base-values.yaml
+
+#   - name: istiod
+#     namespace: istio-system
+#     chart: istio/istiod
+#     version: 1.23.0
+#     installed: {{ .Values.installed.istio }}
+#     values:
+#       - istiod-values.yaml
+#     needs:
+#       - istio-base
+
+#   - name: kiali-operator
+#     namespace: kiali-operator
+#     chart: kiali/kiali-operator
+#     disableValidation: true
+#     version: 1.89.0
+#     installed: {{ and .Values.installed.istio .Values.installed.kiali }}
+#     values:
+#       - kiali-operator-values.yaml
+#     needs:
+#       - istio-system/istiod
+
+  # - name: apache-nifi
+  #   namespace: nifi
+  #   chart: cetic/nifi
+  #   version: 1.2.1
+  #   createNamespace: true
+  #   installed: {{ .Values.installed.nifi }}
+  #   values:
+  #     - nifi-values.yaml.gotmpl
+  #   {{- if .Values.installed.longhorn }}
+  #   needs:
+  #     - longhorn-system/longhorn
+  #   {{- end }}

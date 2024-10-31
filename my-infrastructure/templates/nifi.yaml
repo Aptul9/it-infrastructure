@@ -1,0 +1,28 @@
+{{- if .Values.nifi.enabled }}
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: simplenifi
+  namespace: nifi
+rules:
+- apiGroups: ["coordination.k8s.io"]
+  resources: ["leases"]
+  verbs: ["*"]
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["*"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: simplenifi
+  namespace: nifi
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: nifi
+roleRef:
+  kind: Role
+  name: simplenifi
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}

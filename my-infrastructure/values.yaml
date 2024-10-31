@@ -23,3 +23,6 @@ datadog:
 
 rabbitMQ:
   enabled: true
+
+nifi:
+  enabled: true

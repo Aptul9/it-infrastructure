@@ -1,41 +1,40 @@
-# Se stiamo usando MetalLB la prima volta va fatto helmfile sync e non apply, altrimenti fallisce la creazione delle CRD del chart my-infrastructure
+# Se stiamo usando MetalLB la prima volta va fatto helmfile sync e non apply, altrimenti fallisce la creazione dei CRD e non rispetta i needs
+environments:
+  default:
+    values:
+    - values.yaml.gotmpl
+
+---
 
 repositories:
+  - name: jetstack
+    url: https://charts.jetstack.io
   # - name: prometheus-community
   #   url: https://prometheus-community.github.io/helm-charts
   # - name: grafana
   #   url: https://grafana.github.io/helm-charts
-  # - name: jaegertracing
-  #   url: https://jaegertracing.github.io/helm-charts
   - name: bitnami
     url: https://charts.bitnami.com/bitnami
   # - name: longhorn
   #   url: https://charts.longhorn.io
-  # - name: opentelemetry
-  #   url: https://open-telemetry.github.io/opentelemetry-helm-charts
-  # - name: istio
-  #   url: https://istio-release.storage.googleapis.com/charts
-  # - name: kiali
-  #   url: https://kiali.org/helm-charts
   - name: ingress-nginx
     url: https://kubernetes.github.io/ingress-nginx
   # - name: metallb
   #   url: https://metallb.github.io/metallb
   # - name: datadog
   #   url: https://helm.datadoghq.com
-  # - name: cetic #apache nifi
-  #   url: https://cetic.github.io/helm-charts
-  # - name: camunda
-  #   url: https://helm.camunda.io
+  - name: camunda
+    url: https://helm.camunda.io
   # - name: apache-tika
   #   url: https://apache.jfrog.io/artifactory/tika
 
-environments:
-  default:
-    values:
-    - values.yaml.gotmpl
-
 releases:
+
+  - name: ingress-nginx
+    namespace: ingress-nginx
+    chart: ingress-nginx/ingress-nginx
+    version: 4.11.2
+    installed: {{ .Values.installed.ingressNginx }}
 
 # NON USARE SU MINIKUBE, NON LO FA NEMMENO CANCELLARE SE NO
 #   - name: longhorn
@@ -43,8 +42,20 @@ releases:
 #     chart: longhorn/longhorn
 #     version: 1.7.0
 #     installed: {{ .Values.installed.longhorn }}
-#     values:
-#       - longhorn-values.yaml
+    # values:
+    #   - various/longhorn-values.yaml
+
+  - name: cert-manager
+    namespace: cert-manager
+    chart: jetstack/cert-manager
+    version: 1.16.1
+    createNamespace: true
+    wait: true
+    # waitForJobs: true
+    installed: {{ .Values.installed.certManager }}
+    set:
+      - name: crds.enabled
+        value: true
 
   # - name: kube-prometheus-stack
   #   namespace: monitoring
@@ -53,7 +64,7 @@ releases:
   #   disableValidation: true
   #   installed: {{ .Values.installed.prometheusStack }}
   #   values:
-  #     - kube-prometheus-stack-values.yaml.gotmpl
+  #     - prom-loki/kube-prometheus-stack-values.yaml.gotmpl
   #   {{- if .Values.installed.longhorn }}
   #   needs:
   #     - longhorn-system/longhorn
@@ -65,33 +76,11 @@ releases:
 #     version: 2.10.0
 #     installed: {{ .Values.installed.loki }}
 #     values:
-#       - loki-stack-values.yaml.gotmpl
+#       - prom-loki/loki-stack-values.yaml.gotmpl
 #     {{- if .Values.installed.longhorn }}
 #     needs:
 #       - longhorn-system/longhorn
 #     {{- end }}
-
-#   - name: jaeger
-#     namespace: tracing
-#     chart: jaegertracing/jaeger
-#     version: 3.2.0
-#     installed: {{ .Values.installed.jaeger }}
-#     values:
-#       - jaeger-values.yaml
-#     {{- if .Values.installed.longhorn }}
-#     needs:
-#       - longhorn-system/longhorn
-#     {{- end }}
-
-#   - name: opentelemetry-collector
-#     namespace: tracing
-#     chart: opentelemetry/opentelemetry-collector
-#     version: 0.104.0
-#     installed: {{ and .Values.installed.jaeger .Values.installed.opentelemetry }}
-#     values:
-#       - opentelemetry-collector-values.yaml
-#     needs:
-#       - tracing/jaeger
 
   - name: rabbitmq
     namespace: rabbitmq-operator
@@ -101,11 +90,12 @@ releases:
     wait: true #necessario per my-infrastructure
     waitForJobs: true
     values:
-      - rabbitmq-values.yaml.gotmpl
-    {{- if .Values.installed.longhorn }}
+      - db-queues/rabbitmq-values.yaml.gotmpl
     needs:
+      {{- if .Values.installed.longhorn }}
       - longhorn-system/longhorn
-    {{- end }}
+      {{- end }}
+      - cert-manager/cert-manager
 
 #   - name: redis
 #     namespace: cache
@@ -113,7 +103,7 @@ releases:
 #     version: 20.0.0
 #     installed: {{ .Values.installed.redis }}
 #     values:
-#       - redis-values.yaml
+#       - db-queues/redis-values.yaml
 
 #   - name: mongodb
 #     namespace: database
@@ -121,46 +111,11 @@ releases:
 #     version: 15.6.0
 #     installed: {{ .Values.installed.mongoDB }}
 #     values:
-#       - mongodb-values.yaml.gotmpl
+#       - db-queues/mongodb-values.yaml.gotmpl
 #     {{- if .Values.installed.longhorn }}
 #     needs:
 #       - longhorn-system/longhorn
 #     {{- end }}
-
-#   - name: istio-base
-#     namespace: istio-system
-#     chart: istio/base
-#     version: 1.23.0
-#     installed: {{ .Values.installed.istio }}
-#     values:
-#       - istio-base-values.yaml
-
-#   - name: istiod
-#     namespace: istio-system
-#     chart: istio/istiod
-#     version: 1.23.0
-#     installed: {{ .Values.installed.istio }}
-#     values:
-#       - istiod-values.yaml
-#     needs:
-#       - istio-base
-
-#   - name: kiali-operator
-#     namespace: kiali-operator
-#     chart: kiali/kiali-operator
-#     disableValidation: true
-#     version: 1.89.0
-#     installed: {{ and .Values.installed.istio .Values.installed.kiali }}
-#     values:
-#       - kiali-operator-values.yaml
-#     needs:
-#       - istio-system/istiod
-
-  - name: ingress-nginx
-    namespace: ingress-nginx
-    chart: ingress-nginx/ingress-nginx
-    version: 4.11.2 
-    installed: {{ .Values.installed.ingressNginx }}
 
 #   - name: metallb
 #     namespace: metallb-system
@@ -171,10 +126,12 @@ releases:
 
 #chart usato per creare i CRD di metalLB al cluster, serve per gli indirizzi IP dei LoadBalancers
   - name: my-infrastructure
-    # namespace: metallb-system
+    namespace: my-infrastructure
+    createNamespace: true
     chart: ./my-infrastructure
-    installed: {{ or .Values.installed.metalLB .Values.installed.datadog .Values.installed.rabbitMQ}}
+    installed: {{ or .Values.installed.metalLB .Values.installed.datadog .Values.installed.rabbitMQ .Values.installed.nifikop}}
     wait: true
+    waitForJobs: true
     needs:
       {{- if .Values.installed.metalLB }}
       - metallb-system/metallb
@@ -185,8 +142,11 @@ releases:
       {{- if .Values.installed.rabbitMQ }}
       - rabbitmq-operator/rabbitmq 
       {{- end }}
+      {{- if .Values.installed.nifikop }}
+      - nifi/nifikop 
+      {{- end }}
     values:
-      - it-infrastructure-values.yaml.gotmpl
+      - various/it-infrastructure-values.yaml.gotmpl
 
   # - name: minio
   #   namespace: minio
@@ -194,7 +154,7 @@ releases:
   #   version: 14.7.16
   #   installed: {{ .Values.installed.minio }}
   #   values:
-  #     - minio-values.yaml.gotmpl
+  #     - various/minio-values.yaml.gotmpl
   #   {{- if .Values.installed.longhorn }}
   #   needs:
   #     - longhorn-system/longhorn
@@ -208,30 +168,17 @@ releases:
   #   installed: {{ .Values.installed.datadog }}
   #   wait: true
 
-  # - name: apache-nifi
-  #   namespace: nifi
-  #   chart: cetic/nifi
-  #   version: 1.2.1
-  #   createNamespace: true
-  #   installed: {{ .Values.installed.nifi }}
-  #   values:
-  #     - nifi-values.yaml.gotmpl
-  #   {{- if .Values.installed.longhorn }}
-  #   needs:
-  #     - longhorn-system/longhorn
-  #   {{- end }}
-
-  # - name: camunda
-  #   namespace: camunda
-  #   chart: camunda/camunda-platform
-  #   createNamespace: true
-  #   installed: {{ .Values.installed.camunda }}
-  #   values:
-  #     - camunda-values.yaml.gotmpl
-  #   {{- if .Values.installed.longhorn }}
-  #   needs:
-  #     - longhorn-system/longhorn
-  #   {{- end }}
+  - name: camunda
+    namespace: camunda
+    chart: camunda/camunda-platform
+    createNamespace: true
+    installed: {{ .Values.installed.camunda }}
+    values:
+      - various/camunda-values.yaml.gotmpl
+    {{- if .Values.installed.longhorn }}
+    needs:
+      - longhorn-system/longhorn
+    {{- end }}
 
   # - name: tika
   #   namespace: tika
@@ -240,4 +187,31 @@ releases:
   #   createNamespace: true
   #   installed: {{ .Values.installed.tika }}
   #   values:
-  #     - tika-values.yaml
+  #     - dataflow/tika-values.yaml
+
+  - name: nifikop
+    namespace: nifi
+    chart: oci://ghcr.io/konpyutaika/helm-charts/nifikop
+    version: 1.11.0
+    createNamespace: true
+    wait: true
+    waitForJobs: true
+    installed: {{ .Values.installed.nifikop }}
+    values:
+      - dataflow/nifikop-values.yaml
+    needs:
+      - cert-manager/cert-manager
+
+  - name: nificluster
+    namespace: nifi
+    chart: oci://ghcr.io/konpyutaika/helm-charts/nifi-cluster
+    version: 1.11.1
+    createNamespace: true
+    wait: true
+    waitForJobs: true
+    installed: {{ .Values.installed.nifikop }}
+    values:
+      - dataflow/nificluster-values.yaml.gotmpl
+    needs:
+      - nifi/nifikop
+      - my-infrastructure/my-infrastructure
