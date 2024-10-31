@@ -1,0 +1,21 @@
+global:
+  # storageClass: {{ .Values.defaultStorageClass }}
+  storageClass: standard
+# ingress:
+#   enabled: true
+#   ingressClassName: nginx
+#   hostname: keycloak.local
+# adminIngress:
+#   enabled: true
+#   ingressClassName: nginx
+#   hostname: keycloak-admin.local
+# keycloakConfigCli:
+#   enabled: true
+#   configuration:
+#     master.json: |
+#       {
+#         "realm" : "master",
+#         "attributes": {
+#           "frontendUrl": "https://keycloak-admin.local"
+#         }
+#       }

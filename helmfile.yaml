@@ -25,8 +25,8 @@ repositories:
   #   url: https://helm.datadoghq.com
   - name: camunda
     url: https://helm.camunda.io
-  # - name: apache-tika
-  #   url: https://apache.jfrog.io/artifactory/tika
+  - name: apache-tika
+    url: https://apache.jfrog.io/artifactory/tika
 
 releases:
 
@@ -44,6 +44,7 @@ releases:
 #     installed: {{ .Values.installed.longhorn }}
     # values:
     #   - various/longhorn-values.yaml
+# per cancellare kubectl -n longhorn-system edit settings.longhorn.io deleting-confirmation-flag
 
   - name: cert-manager
     namespace: cert-manager
@@ -148,17 +149,17 @@ releases:
     values:
       - various/it-infrastructure-values.yaml.gotmpl
 
-  # - name: minio
-  #   namespace: minio
-  #   chart: bitnami/minio
-  #   version: 14.7.16
-  #   installed: {{ .Values.installed.minio }}
-  #   values:
-  #     - various/minio-values.yaml.gotmpl
-  #   {{- if .Values.installed.longhorn }}
-  #   needs:
-  #     - longhorn-system/longhorn
-  #   {{- end }}
+  - name: minio
+    namespace: minio
+    chart: bitnami/minio
+    version: 14.7.16
+    installed: {{ .Values.installed.minio }}
+    values:
+      - various/minio-values.yaml.gotmpl
+    {{- if .Values.installed.longhorn }}
+    needs:
+      - longhorn-system/longhorn
+    {{- end }}
 
   # - name: datadog-operator
   #   namespace: datadog
@@ -175,19 +176,21 @@ releases:
     installed: {{ .Values.installed.camunda }}
     values:
       - various/camunda-values.yaml.gotmpl
-    {{- if .Values.installed.longhorn }}
     needs:
+      - ingress-nginx/ingress-nginx
+      {{- if .Values.installed.metalLB }}
       - longhorn-system/longhorn
-    {{- end }}
+      {{- end }}
 
-  # - name: tika
-  #   namespace: tika
-  #   chart: apache-tika/tika
-  #   version: 2.9.0
-  #   createNamespace: true
-  #   installed: {{ .Values.installed.tika }}
-  #   values:
-  #     - dataflow/tika-values.yaml
+
+  - name: tika
+    namespace: tika
+    chart: apache-tika/tika
+    version: 2.9.0
+    createNamespace: true
+    installed: {{ .Values.installed.tika }}
+    values:
+      - dataflow/tika-values.yaml
 
   - name: nifikop
     namespace: nifi
@@ -215,3 +218,15 @@ releases:
     needs:
       - nifi/nifikop
       - my-infrastructure/my-infrastructure
+
+  - name: keycloak
+    namespace: keycloak
+    chart: bitnami/keycloak
+    version: 24.0.3
+    installed: {{ .Values.installed.keycloak }}
+    values:
+      - various/keycloak-values.yaml.gotmpl
+    needs:
+      {{- if .Values.installed.longhorn }}
+      - longhorn-system/longhorn
+      {{- end }}

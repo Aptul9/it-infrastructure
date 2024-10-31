@@ -2,6 +2,7 @@ mode: distributed
 ingress:
   enabled: true
   hostname: minio.local
+  ingressClassName: nginx
 global:
   defaultStorageClass:: {{ .Values.defaultStorageClass }}
 auth:

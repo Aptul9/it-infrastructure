@@ -1,3 +1,4 @@
 ingress:
   enabled: true
   host: longhorn.local
+  ingressClassName: nginx
