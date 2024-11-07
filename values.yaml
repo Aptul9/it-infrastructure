@@ -13,10 +13,12 @@ installed:
   rabbitMQ: false
   redis: false
   mongoDB: false
-  minio: true
+  minio: false
   datadog: false
   nifi: false
   camunda: false
-  tika: true
+  tika: false
   nifikop: false
   keycloak: true
+  harbor: false
+  jenkins: false

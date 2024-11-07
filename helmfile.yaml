@@ -27,6 +27,10 @@ repositories:
     url: https://helm.camunda.io
   - name: apache-tika
     url: https://apache.jfrog.io/artifactory/tika
+  - name: harbor
+    url: https://helm.goharbor.io
+  - name: jenkins
+    url: https://charts.jenkins.io
 
 releases:
 
@@ -222,6 +226,7 @@ releases:
   - name: keycloak
     namespace: keycloak
     chart: bitnami/keycloak
+    createNamespace: true
     version: 24.0.3
     installed: {{ .Values.installed.keycloak }}
     values:
@@ -230,3 +235,19 @@ releases:
       {{- if .Values.installed.longhorn }}
       - longhorn-system/longhorn
       {{- end }}
+
+  - name: harbor
+    namespace: harbor
+    chart: harbor/harbor
+    createNamespace: true
+    installed: {{ .Values.installed.harbor }}
+    values:
+      - various/harbor-values.yaml.gotmpl
+
+  - name: jenkins
+    namespace: jenkins
+    chart: jenkins/jenkins
+    values:
+      - various/jenkins-values.yaml.gotmpl
+    installed: {{ .Values.installed.jenkins }}
+    createNamespace: true

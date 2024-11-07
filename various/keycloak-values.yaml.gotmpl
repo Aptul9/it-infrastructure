@@ -1,6 +1,9 @@
 global:
   storageClass: {{ .Values.defaultStorageClass }}
-  # storageClass: standard
+  postgresql:
+    auth:
+      password: jfKEFOEwyF
+      postgresPassword: jfKEFOEwyF
 ingress:
   enabled: true
   ingressClassName: nginx
