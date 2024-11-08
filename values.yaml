@@ -20,5 +20,5 @@ installed:
   tika: false
   nifikop: false
   keycloak: true
-  harbor: false
+  harbor: true
   jenkins: false

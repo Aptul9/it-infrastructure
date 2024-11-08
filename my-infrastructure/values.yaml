@@ -26,3 +26,6 @@ rabbitMQ:
 
 nifi:
   enabled: true
+
+secretpullnamespaces:
+  - default

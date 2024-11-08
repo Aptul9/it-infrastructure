@@ -134,7 +134,8 @@ releases:
     namespace: my-infrastructure
     createNamespace: true
     chart: ./my-infrastructure
-    installed: {{ or .Values.installed.metalLB .Values.installed.datadog .Values.installed.rabbitMQ .Values.installed.nifikop}}
+    # installed: {{ or .Values.installed.metalLB .Values.installed.datadog .Values.installed.rabbitMQ .Values.installed.nifikop}}
+    installed: true
     wait: true
     waitForJobs: true
     needs:
