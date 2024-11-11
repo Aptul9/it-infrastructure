@@ -1,0 +1,4 @@
+token: {{ token }}
+{% if inventory_hostname != groups['master'][0] %}
+server: https://{{ first_master_ip }}:9345
+{% endif %}

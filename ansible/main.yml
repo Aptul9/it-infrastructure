@@ -1,0 +1,46 @@
+---
+# main.yml
+- name: Install RKE2 on Master and Worker Nodes
+  hosts: all
+  become: true
+  vars:
+    first_master_ip: "{{ hostvars[groups['master'][0]]['ansible_host'] }}"
+    token: "my-shared-secret"
+  tasks:
+    - name: Create RKE2 directory
+      file:
+        path: /etc/rancher/rke2
+        state: directory
+        mode: "0755"
+
+    - name: Create config.yaml
+      template:
+        src: config.yml.j2
+        dest: /etc/rancher/rke2/config.yaml
+        mode: "0644"
+
+    - name: Download and install RKE2 - Server
+      when: inventory_hostname in groups['master']
+      shell: curl -sfL https://get.rke2.io | sh -
+      args:
+        creates: /usr/local/bin/rke2
+
+    - name: Download and install RKE2 - Agent
+      when: inventory_hostname in groups['workers']
+      shell: curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE=agent sh -
+      args:
+        creates: /usr/local/bin/rke2
+
+    - name: Enable and start RKE2 server
+      when: inventory_hostname in groups['master']
+      systemd:
+        name: rke2-server
+        enabled: yes
+        state: started
+
+    - name: Enable and start RKE2 agent
+      when: inventory_hostname in groups['workers']
+      systemd:
+        name: rke2-agent
+        enabled: yes
+        state: started

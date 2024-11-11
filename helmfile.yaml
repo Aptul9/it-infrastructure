@@ -3,7 +3,18 @@ environments:
   default:
     values:
     - values.yaml
-
+  # dev:
+  #   values:
+  #     - values.yaml
+  #     - environments/dev.yaml
+  # staging:
+  #   values:
+  #     - values.yaml
+  #     - environments/staging.yaml
+  # production:
+  #   values:
+  #     - values.yaml
+  #     - environments/production.yaml
 ---
 
 repositories:
