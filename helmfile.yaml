@@ -52,14 +52,16 @@ releases:
     installed: {{ .Values.installed.ingressNginx }}
 
 # NON USARE SU MINIKUBE, NON LO FA NEMMENO CANCELLARE SE NO
-#   - name: longhorn
-#     namespace: longhorn-system
-#     chart: longhorn/longhorn
-#     version: 1.7.0
-#     installed: {{ .Values.installed.longhorn }}
-    # values:
-    #   - various/longhorn-values.yaml
-# per cancellare kubectl -n longhorn-system edit settings.longhorn.io deleting-confirmation-flag
+  # - name: longhorn
+  #   namespace: longhorn-system
+  #   chart: longhorn/longhorn
+  #   version: 1.7.0
+  #   installed: {{ .Values.installed.longhorn }}
+  #   wait: true
+  #   waitForJobs: true
+  #   values:
+  #     - various/longhorn-values.yaml
+# kubectl -n longhorn-system patch -p '{"value": "true"}' --type=merge lhs deleting-confirmation-flag
 
   - name: cert-manager
     namespace: cert-manager
@@ -67,7 +69,7 @@ releases:
     version: 1.16.1
     createNamespace: true
     wait: true
-    # waitForJobs: true
+    waitForJobs: true
     installed: {{ .Values.installed.certManager }}
     set:
       - name: crds.enabled
