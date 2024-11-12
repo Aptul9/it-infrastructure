@@ -20,6 +20,8 @@ environments:
 repositories:
   - name: jetstack
     url: https://charts.jetstack.io
+  - name: rancher-stable
+    url: https://releases.rancher.com/server-charts/stable
   # - name: prometheus-community
   #   url: https://prometheus-community.github.io/helm-charts
   # - name: grafana
@@ -42,6 +44,8 @@ repositories:
     url: https://helm.goharbor.io
   - name: jenkins
     url: https://charts.jenkins.io
+  - name: wso2
+    url: https://helm.wso2.com
 
 releases:
 
@@ -74,6 +78,17 @@ releases:
     set:
       - name: crds.enabled
         value: true
+
+  - name: rancher
+    namespace: cattle-system
+    chart: rancher-stable/rancher
+    version: 2.9.3
+    createNamespace: true
+    installed: {{ .Values.installed.rancher }}
+    values:
+      - various/rancher-values.yaml.gotmpl
+    needs:
+      - cert-manager/cert-manager
 
   # - name: kube-prometheus-stack
   #   namespace: monitoring
@@ -236,6 +251,9 @@ releases:
     needs:
       - nifi/nifikop
       - my-infrastructure/my-infrastructure
+      {{- if .Values.installed.longhorn }}
+      - longhorn-system/longhorn
+      {{- end }}
 
   - name: keycloak
     namespace: keycloak
@@ -257,11 +275,31 @@ releases:
     installed: {{ .Values.installed.harbor }}
     values:
       - various/harbor-values.yaml.gotmpl
+    needs:
+      {{- if .Values.installed.longhorn }}
+      - longhorn-system/longhorn
+      {{- end }}
 
   - name: jenkins
     namespace: jenkins
     chart: jenkins/jenkins
+    createNamespace: true
     values:
       - various/jenkins-values.yaml.gotmpl
     installed: {{ .Values.installed.jenkins }}
+    needs:
+      {{- if .Values.installed.longhorn }}
+      - longhorn-system/longhorn
+      {{- end }}
+
+  - name: wso2
+    namespace: wso2
+    chart: wso2/am-pattern-1
     createNamespace: true
+    installed: {{ .Values.installed.wso2 }}
+    values:
+      - various/wso2-values.yaml.gotmpl
+    needs:
+      {{- if .Values.installed.longhorn }}
+      - longhorn-system/longhorn
+      {{- end }}

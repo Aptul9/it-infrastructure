@@ -1,0 +1,5 @@
+hostname: rancher.local
+bootstrapPassword: jfKEFOEwyF
+replicas: 1
+ingress:
+  ingressClassName: nginx

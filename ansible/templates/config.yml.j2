@@ -4,9 +4,3 @@ server: https://{{ first_master_ip }}:9345
 {% endif %}
 
 disable: rke2-ingress-nginx
-
-{% if inventory_hostname in groups['master'] %}
-node-taint:
-  - "node-role.kubernetes.io/control-plane=true:NoSchedule"
-  - "node-role.kubernetes.io/master=true:NoSchedule"
-{% endif %}

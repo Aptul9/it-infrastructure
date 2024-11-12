@@ -1,0 +1,33 @@
+# default credentials admin/admin
+wso2:
+  deployment:
+    am:
+      dockerRegistry: "docker.io"
+      imageName: "wso2/wso2am"
+      imageTag: "latest"
+      ingress:
+        management:
+          hostname: am.wso2.local
+        gateway:
+          # className: "nginx"
+          hostname: gateway.wso2.local
+        websocket:
+          hostname: websocket.wso2.local
+        websub:
+          hostname: websub.wso2.local
+    mi:
+      dockerRegistry: "docker.io"
+      imageName: "wso2/wso2mi"
+      imageTag: "latest"
+      ingress:
+        # className: "nginx"
+        management:
+          hostname: management-mi-wso2.local
+      # replicas: 2
+    persistentRuntimeArtifacts:
+      storageClass: {{ .Values.defaultStorageClass }}
+
+mysql-am:
+  mysql:
+    persistence:
+      storageClass: {{ .Values.defaultStorageClass }}
