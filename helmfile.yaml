@@ -22,18 +22,18 @@ repositories:
     url: https://charts.jetstack.io
   - name: rancher-stable
     url: https://releases.rancher.com/server-charts/stable
-  # - name: prometheus-community
-  #   url: https://prometheus-community.github.io/helm-charts
-  # - name: grafana
-  #   url: https://grafana.github.io/helm-charts
+  - name: prometheus-community
+    url: https://prometheus-community.github.io/helm-charts
+  - name: grafana
+    url: https://grafana.github.io/helm-charts
   - name: bitnami
     url: https://charts.bitnami.com/bitnami
   # - name: longhorn
   #   url: https://charts.longhorn.io
   - name: ingress-nginx
     url: https://kubernetes.github.io/ingress-nginx
-  # - name: metallb
-  #   url: https://metallb.github.io/metallb
+  - name: metallb
+    url: https://metallb.github.io/metallb
   # - name: datadog
   #   url: https://helm.datadoghq.com
   - name: camunda
@@ -86,34 +86,34 @@ releases:
     createNamespace: true
     installed: {{ .Values.installed.rancher }}
     values:
-      - various/rancher-values.yaml.gotmpl
+      - various/rancher-values.yaml
     needs:
       - cert-manager/cert-manager
 
-  # - name: kube-prometheus-stack
-  #   namespace: monitoring
-  #   chart: prometheus-community/kube-prometheus-stack
-  #   version: 62.3.0
-  #   disableValidation: true
-  #   installed: {{ .Values.installed.prometheusStack }}
-  #   values:
-  #     - prom-loki/kube-prometheus-stack-values.yaml.gotmpl
-  #   {{- if .Values.installed.longhorn }}
-  #   needs:
-  #     - longhorn-system/longhorn
-  #   {{- end }}
+  - name: kube-prometheus-stack
+    namespace: monitoring
+    chart: prometheus-community/kube-prometheus-stack
+    version: 62.3.0
+    disableValidation: true
+    installed: {{ .Values.installed.prometheusStack }}
+    values:
+      - prom-loki/kube-prometheus-stack-values.yaml.gotmpl
+    {{- if .Values.installed.longhorn }}
+    needs:
+      - longhorn-system/longhorn
+    {{- end }}
 
-#   - name: loki-stack
-#     namespace: logging
-#     chart: grafana/loki-stack
-#     version: 2.10.0
-#     installed: {{ .Values.installed.loki }}
-#     values:
-#       - prom-loki/loki-stack-values.yaml.gotmpl
-#     {{- if .Values.installed.longhorn }}
-#     needs:
-#       - longhorn-system/longhorn
-#     {{- end }}
+  - name: loki-stack
+    namespace: logging
+    chart: grafana/loki-stack
+    version: 2.10.0
+    installed: {{ .Values.installed.loki }}
+    values:
+      - prom-loki/loki-stack-values.yaml.gotmpl
+    {{- if .Values.installed.longhorn }}
+    needs:
+      - longhorn-system/longhorn
+    {{- end }}
 
   - name: rabbitmq
     namespace: rabbitmq-operator
@@ -130,25 +130,25 @@ releases:
       {{- end }}
       - cert-manager/cert-manager
 
-#   - name: redis
-#     namespace: cache
-#     chart: bitnami/redis
-#     version: 20.0.0
-#     installed: {{ .Values.installed.redis }}
-#     values:
-#       - db-queues/redis-values.yaml
+  - name: redis
+    namespace: cache
+    chart: bitnami/redis
+    version: 20.0.0
+    installed: {{ .Values.installed.redis }}
+    values:
+      - db-queues/redis-values.yaml
 
-#   - name: mongodb
-#     namespace: database
-#     chart: bitnami/mongodb
-#     version: 15.6.0
-#     installed: {{ .Values.installed.mongoDB }}
-#     values:
-#       - db-queues/mongodb-values.yaml.gotmpl
-#     {{- if .Values.installed.longhorn }}
-#     needs:
-#       - longhorn-system/longhorn
-#     {{- end }}
+  - name: mongodb
+    namespace: database
+    chart: bitnami/mongodb
+    version: 15.6.0
+    installed: {{ .Values.installed.mongoDB }}
+    values:
+      - db-queues/mongodb-values.yaml.gotmpl
+    {{- if .Values.installed.longhorn }}
+    needs:
+      - longhorn-system/longhorn
+    {{- end }}
 
 #   - name: metallb
 #     namespace: metallb-system
@@ -297,6 +297,7 @@ releases:
     chart: wso2/am-pattern-1
     createNamespace: true
     installed: {{ .Values.installed.wso2 }}
+    version: 4.2.0-2
     values:
       - various/wso2-values.yaml.gotmpl
     needs:

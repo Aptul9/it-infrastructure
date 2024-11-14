@@ -1,3 +1,6 @@
 {
-    "ansible.python.interpreterPath": "c:\\Python312\\python.exe"
+    "ansible.python.interpreterPath": "c:\\Python312\\python.exe",
+    "yaml.schemas": {
+        "https://json.schemastore.org/helmfile.json": "file:///c%3A/Users/Antonio/OneDrive%20-%20PRISMA%20SRL/Documents/it-infrastructure/helmfile.yaml"
+    }
 }

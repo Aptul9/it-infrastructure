@@ -4,23 +4,23 @@ installed:
   certManager: true
   rancher: false
   metalLB: false
-  istio: false
-  kiali: false
+  istio: true
+  kiali: true
   longhorn: false
-  loki: false
-  prometheusStack: false
-  jaeger: false
-  opentelemetry: false
-  rabbitMQ: false
-  redis: false
-  mongoDB: false
-  minio: false
+  loki: true
+  prometheusStack: true
+  jaeger: true
+  opentelemetry: true
+  rabbitMQ: true
+  redis: true
+  mongoDB: true
+  minio: true
   datadog: false
-  nifi: false
+  nifi: true
   camunda: false
-  tika: false
-  nifikop: false
+  tika: true
+  nifikop: true
   keycloak: true
   harbor: true
-  jenkins: false
+  jenkins: true
   wso2: true
