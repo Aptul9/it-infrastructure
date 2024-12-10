@@ -1,9 +1,9 @@
 expose:
   ingress:
     hosts:
-      core: harbor.local
+      core: harbor-{{ .Environment.Name }}.pcdacs.local
     className: nginx
-externalURL: https://harbor.local
+externalURL: https://harbor-{{ .Environment.Name }}.pcdacs.local
 persistence:
   persistentVolumeClaim:
     registry:

@@ -42,10 +42,10 @@ repositories:
     url: https://apache.jfrog.io/artifactory/tika
   - name: harbor
     url: https://helm.goharbor.io
-  - name: jenkins
-    url: https://charts.jenkins.io
   - name: wso2
     url: https://helm.wso2.com
+  - name: sonarqube
+    url: https://SonarSource.github.io/helm-chart-sonarqube
 
 releases:
 
@@ -280,18 +280,6 @@ releases:
       - longhorn-system/longhorn
       {{- end }}
 
-  - name: jenkins
-    namespace: jenkins
-    chart: jenkins/jenkins
-    createNamespace: true
-    values:
-      - various/jenkins-values.yaml.gotmpl
-    installed: {{ .Values.installed.jenkins }}
-    needs:
-      {{- if .Values.installed.longhorn }}
-      - longhorn-system/longhorn
-      {{- end }}
-
   - name: wso2
     namespace: wso2
     chart: wso2/am-pattern-1
@@ -300,6 +288,19 @@ releases:
     version: 4.2.0-2
     values:
       - various/wso2-values.yaml.gotmpl
+    needs:
+      {{- if .Values.installed.longhorn }}
+      - longhorn-system/longhorn
+      {{- end }}
+
+  - name: sonarqube
+    namespace: sonarqube
+    chart: sonarqube/sonarqube
+    createNamespace: true
+    installed: {{ .Values.installed.sonarqube }}
+    version: 10.8.0
+    values:
+      - various/sonarqube-values.yaml.gotmpl
     needs:
       {{- if .Values.installed.longhorn }}
       - longhorn-system/longhorn

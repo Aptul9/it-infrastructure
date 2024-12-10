@@ -12,7 +12,7 @@ grafana:
     enabled: true
     ingressClassName: nginx
     hosts: 
-      - grafana.local
+      - grafana-{{ .Environment.Name }}.pcdacs.local
 prometheus:
   prometheusSpec:
     routePrefix: /
@@ -28,7 +28,7 @@ prometheus:
     enabled: true
     ingressClassName: nginx
     hosts:
-      - prometheus.local
+      - prometheus-{{ .Environment.Name }}.pcdacs.local
     paths:
       - /
 alertmanager:
@@ -46,6 +46,6 @@ alertmanager:
     enabled: true
     ingressClassName: nginx
     hosts:
-      - alertmanager.local
+      - alertmanager-{{ .Environment.Name }}.pcdacs.local
     paths:
       - /

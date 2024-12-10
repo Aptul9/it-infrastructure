@@ -1,7 +1,7 @@
 global:
   ingress:
     enabled: true
-    host: camunda.local
+    host: camunda-{{ .Environment.Name }}.pcdacs.local
   identity:
     auth:
       tasklist:
@@ -29,10 +29,10 @@ zeebeGateway:
   ingress:
     grpc:
       enabled: true
-      host: "zeebe-grpc.local"
+      host: "zeebe-grpc-{{ .Environment.Name }}.pcdacs.local"
     rest:
       enabled: true
-      host: "zeebe-rest.local"
+      host: "zeebe-rest-{{ .Environment.Name }}.pcdacs.local"
 identity:
   keycloak:
     auth:

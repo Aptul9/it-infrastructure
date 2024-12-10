@@ -1,7 +1,7 @@
 mode: distributed
 ingress:
   enabled: true
-  hostname: minio.local
+  hostname: minio-{{ .Environment.Name }}.pcdacs.local
   ingressClassName: nginx
 global:
   defaultStorageClass:: {{ .Values.defaultStorageClass }}

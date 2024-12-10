@@ -1,4 +1,4 @@
-hostname: rancher.local
+hostname: rancher-{{ .Environment.Name }}.pcdacs.local
 bootstrapPassword: jfKEFOEwyF
 replicas: 1
 ingress:

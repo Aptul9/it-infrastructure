@@ -4,7 +4,7 @@ cluster:
     tag: 2.0.0-M4
   nifiProperties:
     webProxyHosts:
-      - nifi.local
+      - nifi-{{ .Environment.Name }}.pcdacs.local
     overrideConfigs: |-
       nifi.sensitive.props.key=thisisabadsensitivepropskey
   nodeConfigGroups:

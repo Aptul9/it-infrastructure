@@ -11,6 +11,8 @@ repositories:
   #   url: https://helm.datadoghq.com
   # - name: cetic #apache nifi
   #   url: https://cetic.github.io/helm-charts
+  # - name: jenkins
+  #   url: https://charts.jenkins.io
 
 releases:
 
@@ -77,3 +79,16 @@ releases:
   #   needs:
   #     - longhorn-system/longhorn
   #   {{- end }}
+
+
+  # - name: jenkins
+  #   namespace: jenkins
+  #   chart: jenkins/jenkins
+  #   createNamespace: true
+  #   values:
+  #     - various/jenkins-values.yaml.gotmpl
+  #   installed: {{ .Values.installed.jenkins }}
+  #   needs:
+  #     {{- if .Values.installed.longhorn }}
+  #     - longhorn-system/longhorn
+  #     {{- end }}

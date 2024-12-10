@@ -2,7 +2,7 @@ ingress:
   enabled: true
   className: nginx
   hosts:
-    - host: apache-tika.local
+    - host: apache-tika-{{ .Environment.Name }}.pcdacs.local
       paths: 
        - path: /
          pathType: Prefix

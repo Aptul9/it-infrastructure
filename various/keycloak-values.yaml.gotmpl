@@ -7,11 +7,11 @@ global:
 ingress:
   enabled: true
   ingressClassName: nginx
-  hostname: keycloak.local
+  hostname: keycloak-{{ .Environment.Name }}.pcdacs.local
 adminIngress:
   enabled: true
   ingressClassName: nginx
-  hostname: keycloak-admin.local
+  hostname: keycloak-admin-{{ .Environment.Name }}.pcdacs.local
 auth:
   adminUser: admin
   adminPassword: jfKEFOEwyF
