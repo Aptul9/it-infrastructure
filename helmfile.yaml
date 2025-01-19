@@ -3,10 +3,8 @@ environments:
   default:
     values:
     - values.yaml
-  # dev:
-  #   values:
-  #     - values.yaml
-  #     - environments/dev.yaml
+  dev:
+    values: []
   # staging:
   #   values:
   #     - values.yaml
@@ -28,8 +26,8 @@ repositories:
     url: https://grafana.github.io/helm-charts
   - name: bitnami
     url: https://charts.bitnami.com/bitnami
-  # - name: longhorn
-  #   url: https://charts.longhorn.io
+  - name: longhorn
+    url: https://charts.longhorn.io
   - name: ingress-nginx
     url: https://kubernetes.github.io/ingress-nginx
   - name: metallb
@@ -56,15 +54,15 @@ releases:
     installed: {{ .Values.installed.ingressNginx }}
 
 # NON USARE SU MINIKUBE, NON LO FA NEMMENO CANCELLARE SE NO
-  # - name: longhorn
-  #   namespace: longhorn-system
-  #   chart: longhorn/longhorn
-  #   version: 1.7.0
-  #   installed: {{ .Values.installed.longhorn }}
-  #   wait: true
-  #   waitForJobs: true
-  #   values:
-  #     - various/longhorn-values.yaml
+  - name: longhorn
+    namespace: longhorn-system
+    chart: longhorn/longhorn
+    version: 1.7.0
+    installed: {{ .Values.installed.longhorn }}
+    wait: true
+    waitForJobs: true
+    values:
+      - various/longhorn-values.yaml
 # kubectl -n longhorn-system patch -p '{"value": "true"}' --type=merge lhs deleting-confirmation-flag
 
   - name: cert-manager
@@ -150,12 +148,12 @@ releases:
       - longhorn-system/longhorn
     {{- end }}
 
-#   - name: metallb
-#     namespace: metallb-system
-#     chart: metallb/metallb
-#     version: 0.14.8
-#     installed: {{ .Values.installed.metalLB }}
-#     wait: true #altrimenti fallisce la creazione di my-infrastructure
+  - name: metallb
+    namespace: metallb-system
+    chart: metallb/metallb
+    version: 0.14.8
+    installed: {{ .Values.installed.metalLB }}
+    wait: true #altrimenti fallisce la creazione di my-infrastructure
 
 #chart usato per creare i CRD di metalLB al cluster, serve per gli indirizzi IP dei LoadBalancers
   - name: my-infrastructure
@@ -181,18 +179,6 @@ releases:
       {{- end }}
     values:
       - various/it-infrastructure-values.yaml.gotmpl
-
-  - name: minio
-    namespace: minio
-    chart: bitnami/minio
-    version: 14.7.16
-    installed: {{ .Values.installed.minio }}
-    values:
-      - various/minio-values.yaml.gotmpl
-    {{- if .Values.installed.longhorn }}
-    needs:
-      - longhorn-system/longhorn
-    {{- end }}
 
   # - name: datadog-operator
   #   namespace: datadog
