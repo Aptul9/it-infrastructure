@@ -1,8 +1,8 @@
-defaultStorageClass: standard
+defaultStorageClass: longhorn
 installed:
   ingressNginx: true
   certManager: true
-  rancher: true
+  rancher: false
   metalLB: true
   longhorn: true
   loki: true
@@ -15,7 +15,7 @@ installed:
   camunda: true
   tika: true
   nifikop: true
-  keycloak: true
+  keycloak: false
   harbor: true
   wso2: true
   sonarqube: true

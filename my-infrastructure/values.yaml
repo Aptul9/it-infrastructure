@@ -3,8 +3,8 @@ metallb:
   ipAddressPool:
     name: default-pool
     ipRange:
-      start: 192.168.1.240
-      end: 192.168.1.250
+      start: 10.1.0.50
+      end: 10.1.0.60
 
 datadog:
   enabled: true

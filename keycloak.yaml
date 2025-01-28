@@ -1,18 +1,18 @@
 global:
-  storageClass: {{ .Values.defaultStorageClass }}
+  storageClass: standard
 postgresql:
-  enalbed: false
-  # auth:
-  #   password: jfKEFOEwyF
-  #   postgresPassword: jfKEFOEwyF
+    enabled: false
+    # auth:
+    #     password: jfKEFOEwyF
+    #     postgresPassword: jfKEFOEwyF
 ingress:
   enabled: true
   ingressClassName: nginx
-  hostname: keycloak-{{ .Environment.Name }}.pcdacs.local
+  hostname: keycloak-dev.pcdacs.local
 adminIngress:
   enabled: true
   ingressClassName: nginx
-  hostname: keycloak-admin-{{ .Environment.Name }}.pcdacs.local
+  hostname: keycloak-admin-dev.pcdacs.local
 auth:
   adminUser: admin
   adminPassword: jfKEFOEwyF

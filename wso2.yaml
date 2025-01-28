@@ -7,15 +7,14 @@ wso2:
       imageTag: "latest"
       ingress:
         management:
-          enabled: true
-          hostname: am.wso2-{{ .Environment.Name }}.pcdacs.local
+          hostname: am.wso2-dev.pcdacs.local
         gateway:
           className: "nginx"
-          hostname: gateway.wso2-{{ .Environment.Name }}.pcdacs.local
+          hostname: gateway.wso2-dev.pcdacs.local
         websocket:
-          hostname: websocket.wso2-{{ .Environment.Name }}.pcdacs.local
+          hostname: websocket.wso2-dev.pcdacs.local
         websub:
-          hostname: websub.wso2-{{ .Environment.Name }}.pcdacs.local
+          hostname: websub.wso2-dev.pcdacs.local
     mi:
       dockerRegistry: "docker.io"
       imageName: "wso2/wso2mi"
@@ -23,12 +22,12 @@ wso2:
       ingress:
         className: "nginx"
         management:
-          hostname: management-mi-wso2-{{ .Environment.Name }}.pcdacs.local
+          hostname: management-mi-wso2-dev.pcdacs.local
       # replicas: 2
     persistentRuntimeArtifacts:
-      storageClass: {{ .Values.defaultStorageClass }}
+      storageClass: longhorn
 
 mysql-am:
   mysql:
     persistence:
-      storageClass: {{ .Values.defaultStorageClass }}
+      storageClass: longhorn

@@ -1,10 +1,15 @@
 # Se stiamo usando MetalLB la prima volta va fatto helmfile sync e non apply, altrimenti fallisce la creazione dei CRD e non rispetta i needs
+
+helmDefaults:
+  timeout: 600
+
 environments:
   default:
     values:
     - values.yaml
   dev:
-    values: []
+    values:
+    - values.yaml
   # staging:
   #   values:
   #     - values.yaml
@@ -50,28 +55,24 @@ releases:
   - name: ingress-nginx
     namespace: ingress-nginx
     chart: ingress-nginx/ingress-nginx
-    version: 4.11.2
     installed: {{ .Values.installed.ingressNginx }}
 
 # NON USARE SU MINIKUBE, NON LO FA NEMMENO CANCELLARE SE NO
   - name: longhorn
     namespace: longhorn-system
     chart: longhorn/longhorn
-    version: 1.7.0
     installed: {{ .Values.installed.longhorn }}
     wait: true
     waitForJobs: true
+    timeout: 600
     values:
-      - various/longhorn-values.yaml
+      - various/longhorn-values.gotmpl
 # kubectl -n longhorn-system patch -p '{"value": "true"}' --type=merge lhs deleting-confirmation-flag
 
   - name: cert-manager
     namespace: cert-manager
     chart: jetstack/cert-manager
-    version: 1.16.1
     createNamespace: true
-    wait: true
-    waitForJobs: true
     installed: {{ .Values.installed.certManager }}
     set:
       - name: crds.enabled
@@ -80,11 +81,10 @@ releases:
   - name: rancher
     namespace: cattle-system
     chart: rancher-stable/rancher
-    version: 2.9.3
     createNamespace: true
     installed: {{ .Values.installed.rancher }}
     values:
-      - various/rancher-values.yaml
+      - various/rancher-values.gotmpl
     needs:
       - cert-manager/cert-manager
 
@@ -209,7 +209,7 @@ releases:
     createNamespace: true
     installed: {{ .Values.installed.tika }}
     values:
-      - dataflow/tika-values.yaml
+      - dataflow/tika-values.gotmpl
 
   - name: nifikop
     namespace: nifi
@@ -266,18 +266,18 @@ releases:
       - longhorn-system/longhorn
       {{- end }}
 
-  - name: wso2
-    namespace: wso2
-    chart: wso2/am-pattern-1
-    createNamespace: true
-    installed: {{ .Values.installed.wso2 }}
-    version: 4.2.0-2
-    values:
-      - various/wso2-values.yaml.gotmpl
-    needs:
-      {{- if .Values.installed.longhorn }}
-      - longhorn-system/longhorn
-      {{- end }}
+  # - name: wso2
+  #   namespace: wso2
+  #   chart: wso2/am-pattern-1
+  #   createNamespace: true
+  #   installed: {{ .Values.installed.wso2 }}
+  #   version: 4.2.0-2
+  #   values:
+  #     - various/wso2-values.yaml.gotmpl
+  #   needs:
+  #     {{- if .Values.installed.longhorn }}
+  #     - longhorn-system/longhorn
+  #     {{- end }}
 
   - name: sonarqube
     namespace: sonarqube
