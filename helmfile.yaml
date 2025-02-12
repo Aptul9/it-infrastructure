@@ -6,14 +6,19 @@ helmDefaults:
 environments:
   default:
     values:
-    - values.yaml
+    - values.dev.yaml
   dev:
     values:
-    - values.yaml
-  # staging:
-  #   values:
-  #     - values.yaml
-  #     - environments/staging.yaml
+    - values.dev.yaml
+    kubeContext: acs_dev
+  int:
+    values:
+    - values.int.yaml
+    kubeContext: acs_int
+  col:
+    values:
+    - values.col.yaml
+    kubeContext: acs_col
   # production:
   #   values:
   #     - values.yaml
@@ -197,7 +202,7 @@ releases:
       - various/camunda-values.yaml.gotmpl
     needs:
       - ingress-nginx/ingress-nginx
-      {{- if .Values.installed.metalLB }}
+      {{- if .Values.installed.longhorn }}
       - longhorn-system/longhorn
       {{- end }}
 
@@ -214,7 +219,7 @@ releases:
   - name: nifikop
     namespace: nifi
     chart: oci://ghcr.io/konpyutaika/helm-charts/nifikop
-    version: 1.11.0
+    version: 1.12.0
     createNamespace: true
     wait: true
     waitForJobs: true
@@ -266,18 +271,18 @@ releases:
       - longhorn-system/longhorn
       {{- end }}
 
-  # - name: wso2
-  #   namespace: wso2
-  #   chart: wso2/am-pattern-1
-  #   createNamespace: true
-  #   installed: {{ .Values.installed.wso2 }}
-  #   version: 4.2.0-2
-  #   values:
-  #     - various/wso2-values.yaml.gotmpl
-  #   needs:
-  #     {{- if .Values.installed.longhorn }}
-  #     - longhorn-system/longhorn
-  #     {{- end }}
+  - name: wso2
+    namespace: wso2
+    chart: wso2/am-pattern-1
+    createNamespace: true
+    installed: {{ .Values.installed.wso2 }}
+    version: 4.2.0-2
+    values:
+      - various/wso2-values.yaml.gotmpl
+    needs:
+      {{- if .Values.installed.longhorn }}
+      - longhorn-system/longhorn
+      {{- end }}
 
   - name: sonarqube
     namespace: sonarqube

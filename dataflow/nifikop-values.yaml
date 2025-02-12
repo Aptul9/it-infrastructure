@@ -1,5 +1,5 @@
-image:
-  tag: v1.11.0-release
+# image:
+#   tag: v1.11.0-release
 
 resources:
   requests:

@@ -1,0 +1,26 @@
+defaultStorageClass: longhorn
+installed:
+  ingressNginx: true
+  certManager: true
+  rancher: true
+  metalLB: true
+  longhorn: true
+  loki: true
+  prometheusStack: true
+  rabbitMQ: true
+  redis: true
+  mongoDB: true
+  datadog: false
+  nifi: true
+  camunda: true
+  tika: false
+  nifikop: true
+  keycloak: false
+  harbor: true
+  wso2: true
+  sonarqube: true
+loadBalancerIpRange:
+  start: 10.11.0.50
+  end: 10.11.0.60
+longhorn:
+  volumeReplica: 1

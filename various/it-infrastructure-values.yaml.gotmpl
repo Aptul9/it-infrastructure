@@ -3,8 +3,8 @@ metallb:
   ipAddressPool:
     name: default-pool
     ipRange:
-      start: 10.1.0.65
-      end: 10.1.0.70
+      start: {{ .Values.loadBalancerIpRange.start }}
+      end: {{ .Values.loadBalancerIpRange.end }}
 
 datadog:
   enabled: {{ .Values.installed.datadog }}

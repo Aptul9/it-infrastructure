@@ -20,6 +20,7 @@ global:
         auth:
           postgresPassword: jfKEFOEwyF
 zeebe:
+  pvcSize: 16Gi
   pvcStorageClassName: {{ .Values.defaultStorageClass }}
   image:
     tag: 8.5.8
@@ -41,3 +42,8 @@ identity:
     postgresql:
       auth:
         password: jfKEFOEwyF
+
+elasticsearch:
+  master:
+    persistence:
+      size: 24Gi

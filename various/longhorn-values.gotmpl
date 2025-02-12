@@ -2,3 +2,5 @@ ingress:
   enabled: true
   host: longhorn-{{ .Environment.Name }}.pcdacs.local
   ingressClassName: nginx
+defaultSettings:
+  defaultReplicaCount: {{ .Values.longhorn.volumeReplica }}
