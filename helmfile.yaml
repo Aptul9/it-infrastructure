@@ -19,10 +19,10 @@ environments:
     values:
     - values.col.yaml
     kubeContext: acs_col
-  # production:
-  #   values:
-  #     - values.yaml
-  #     - environments/production.yaml
+  prd:
+    values:
+    - values.prd.yaml
+    kubeContext: acs_prd
 ---
 
 repositories:

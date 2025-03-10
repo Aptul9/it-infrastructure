@@ -1,7 +1,7 @@
 global:
   storageClass: {{ .Values.defaultStorageClass }}
 postgresql:
-  enalbed: false
+  enabled: false
   # auth:
   #   password: jfKEFOEwyF
   #   postgresPassword: jfKEFOEwyF
@@ -30,8 +30,8 @@ auth:
 
 # valori per riutilizzare il postgres che già abbiamo, cancellare global.postgresql.auth e mettere global.postgresql.enabled=false
 externalDatabase:
-  host: "10.2.0.11"
-  port: 5432
-  user: postgres
-  password: password
-  database: keycloak
+  host: {{ .Values.keycloak.externalDatabase.host }}
+  port: {{ .Values.keycloak.externalDatabase.port }}
+  user: {{ .Values.keycloak.externalDatabase.user }}
+  password: {{ .Values.keycloak.externalDatabase.password }}
+  database: {{ .Values.keycloak.externalDatabase.database }}

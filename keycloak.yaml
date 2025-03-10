@@ -1,5 +1,5 @@
 global:
-  storageClass: standard
+  storageClass: default
 postgresql:
     enabled: false
     # auth:
@@ -8,30 +8,19 @@ postgresql:
 ingress:
   enabled: true
   ingressClassName: nginx
-  hostname: keycloak-dev.pcdacs.local
+  hostname: keycloak-prd.pcdacs.local
 adminIngress:
   enabled: true
   ingressClassName: nginx
-  hostname: keycloak-admin-dev.pcdacs.local
+  hostname: keycloak-admin-prd.pcdacs.local
 auth:
   adminUser: admin
   adminPassword: jfKEFOEwyF
-# non funziona
-# keycloakConfigCli:
-#   enabled: true
-#   configuration:
-#     master.json: |
-#       {
-#         "realm" : "master",
-#         "attributes": {
-#           "frontendUrl": "https://keycloak-admin.local"
-#         }
-#       }
 
 # valori per riutilizzare il postgres che già abbiamo, cancellare global.postgresql.auth e mettere global.postgresql.enabled=false
 externalDatabase:
-  host: "10.2.0.11"
-  port: 5432
-  user: postgres
+  host: postgresql-prd.pcdacs.local
+  port: 5000
+  user: admin
   password: password
   database: keycloak

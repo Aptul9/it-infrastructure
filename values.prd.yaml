@@ -15,19 +15,19 @@ installed:
   camunda: true
   tika: true
   nifikop: true
-  keycloak: false
+  keycloak: true
   harbor: true
   wso2: true
   sonarqube: true
 loadBalancerIpRange:
-  start: 10.1.0.50
-  end: 10.1.0.60
+  start: 10.32.11.50
+  end: 10.32.11.60
 longhorn:
   volumeReplica: 1
 keycloak:
   externalDatabase:
-    host: "10.2.0.11"
-    port: 5432
-    user: postgres
+    host: "postgresql-prd.pcdacs.local"
+    port: 5000
+    user: admin
     password: password
     database: keycloak
