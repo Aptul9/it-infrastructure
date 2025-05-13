@@ -1,0 +1,18 @@
+### SonarQube Helm Chart Configuration using Bitnami Helm Chart
+global:
+  defaultStorageClass: standard
+
+externalDatabase:
+  host: "postgresql-col.pcdacs.local"
+  user: "sonarqube"
+  password: "sonarqube"
+  database: sonarqube
+  port: 5000
+
+postgresql:
+  enabled: false
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  hostname: sonarqube-{{ .Environment.Name }}.pcdacs.local

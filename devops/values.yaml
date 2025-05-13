@@ -1,0 +1,10 @@
+installed:
+  ingressNginx: true
+  certManager: true
+  rancher: true
+  metalLB: true
+  longhorn: true
+  harbor: true
+  sonarqube: true
+longhorn:
+  volumeReplica: 1

@@ -1,0 +1,38 @@
+persistence:
+  storageClass: {{ .Values.defaultStorageClass }}
+
+image:
+  tag: community
+
+ingress:
+  enabled: true
+  hosts:
+    - name: sonarqube-{{ .Environment.Name }}.pcdacs.local
+      path: /
+  ingressClassName: nginx
+
+postgresql:
+  persistence:
+    storageClass: {{ .Values.defaultStorageClass }}
+
+#credo vada modificata l'image tag di default altrimenti non la trova
+
+
+### SonarQube Helm Chart Configuration using Bitnami Helm Chart
+# global:
+#   defaultStorageClass: standard
+
+# externalDatabase:
+#   host: "postgres-postgresql.postgres.svc.cluster.local"
+#   user: "username"
+#   password: "password"
+#   database: sonarqube
+#   port: 5432
+
+# postgresql:
+#   enabled: false
+
+# ingress:
+#   enabled: true
+#   ingressClassName: nginx
+#   hostname: sonarqube.local

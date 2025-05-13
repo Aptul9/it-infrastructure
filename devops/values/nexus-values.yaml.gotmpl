@@ -1,0 +1,28 @@
+#https://artifacthub.io/packages/helm/stevehipwell/nexus3
+# kubectl create secret generic nexus-password --from-literal=password=password -n nexus
+
+rootPassword:
+  secret: nexus-password
+  key: password
+
+# persistence:
+#   enabled: true
+#   storageClass: standard
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  hosts:
+    - nexus.local
+
+# opz per usare postgres esterno, controllare
+env:
+  - name: INSTALL4J_ADD_VM_PARAMS
+    value: |-
+      -Xms2703M
+      -Xmx2703M
+      -Djava.util.prefs.userRoot=/nexus-data/javaprefs
+      -Dnexus.datastore.enabled=true
+      -Dnexus.datastore.nexus.jdbcUrl=jdbc:postgresql://postgresql-col.pcdacs.local:5000/nexus
+      -Dnexus.datastore.nexus.username=nexus
+      -Dnexus.datastore.nexus.password=nexus

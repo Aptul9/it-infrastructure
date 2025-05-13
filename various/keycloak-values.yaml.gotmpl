@@ -35,3 +35,5 @@ externalDatabase:
   user: {{ .Values.keycloak.externalDatabase.user }}
   password: {{ .Values.keycloak.externalDatabase.password }}
   database: {{ .Values.keycloak.externalDatabase.database }}
+
+replicaCount: {{ if or (eq .Environment.Name "prd") (eq .Environment.Name "col") }}2{{ else }}1{{ end }}

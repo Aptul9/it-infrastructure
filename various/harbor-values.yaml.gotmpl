@@ -18,3 +18,40 @@ persistence:
     trivy:
       storageClass: {{ .Values.defaultStorageClass }}
 harborAdminPassword: jfKEFOEwyF
+
+## valori per bitnami/harbor
+
+# global:
+#   defaultStorageClass: standard
+
+# postgresql:
+#   enabled: false
+
+# externalDatabase:
+#   host: postgres-postgresql.postgres.svc.cluster.local
+#   port: 5432
+#   user: username
+#   password: "password"
+#   coreDatabase: harbor
+#   sslmode: disable
+
+# exposureType: ingress
+
+# ingress:
+#   core:
+#     enabled: true
+#     hostname: harbor.local
+#     ingressClassName: nginx
+
+# adminPassword: "jfKEFOEwyF"
+
+# trivy:
+#   enabled: false
+
+# redis:
+#   enabled: false
+
+# externalRedis:
+#   host: redis-master.redis.svc.cluster.local
+#   port: 6379
+#   password: "jfKEFOEwyF"

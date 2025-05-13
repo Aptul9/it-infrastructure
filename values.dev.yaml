@@ -16,9 +16,10 @@ installed:
   tika: true
   nifikop: true
   keycloak: false
-  harbor: true
-  wso2: true
-  sonarqube: true
+  harbor: false
+  wso2: false
+  sonarqube: false
+  elastic: true
 loadBalancerIpRange:
   start: 10.1.0.50
   end: 10.1.0.60

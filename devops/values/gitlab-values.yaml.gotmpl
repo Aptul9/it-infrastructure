@@ -1,0 +1,99 @@
+global:
+  edition: ce
+  hosts:
+    domain: gitlab.local
+    # externalIP: 162.55.183.230
+  ingress:
+    configureCertmanager: false
+  kas:
+    enabled: false
+  registry:
+    enabled: false
+  psql:
+    database: gitlab
+    host: postgresql-col.pcdacs.local
+    password:
+      key: password
+      secret: pgsql-secrets
+    username: gitlab
+  redis:
+    auth:
+      enabled: true
+      secret: gitlab-redis-secret
+      key: redis-password
+    host: redis-master.redis.svc.cluster.local
+    port: 6379
+    database: 1
+  minio:
+    enabled: false
+  appConfig:
+    object_store:
+      enabled: true
+      proxy_download: true
+      connection:
+        secret: gitlab-rails-storage
+        key: connection
+    lfs:
+      enabled: true
+      proxy_download: true
+      bucket: git-lfs
+    artifacts:
+      enabled: true
+      proxy_download: true
+      bucket: gitlab-artifacts
+    uploads:
+      enabled: true
+      proxy_download: true
+      bucket: gitlab-uploads
+    packages:
+      enabled: true
+      proxy_download: true
+      bucket: gitlab-packages
+    externalDiffs:
+      enabled: false
+      proxy_download: true
+      bucket: gitlab-mr-diffs
+
+    terraformState:
+      enabled: false
+      bucket: gitlab-terraform-state
+    ciSecureFiles:
+      enabled: false
+      bucket: gitlab-ci-secure-files
+    dependencyProxy:
+      enabled: false
+      proxy_download: true
+      bucket: gitlab-dependency-proxy
+    backups:
+      bucket: gitlab-backups
+      tmpBucket: tmp
+
+
+
+# kubectl create secret generic pgsql-secrets --from-literal=password=password --namespace=gitlab
+# kubectl create secret generic gitlab-redis-secret --from-literal=redis-password=jfKEFOEwyF -n gitlab
+# kubectl create secret generic gitlab-rails-storage --from-file=connection=minio-secret.yaml -n gitlab
+
+  # certmanager-issuer:
+  #   email: certificates@farhadnowzari.dev
+
+redis:
+  install: false
+
+postgresql:
+  install: false
+
+prometheus:
+  install: false
+
+gitlab-runner:
+  install: false
+
+nginx-ingress:
+  enabled: false
+
+certmanager:
+  install: false
+
+registry:
+  enabled: false

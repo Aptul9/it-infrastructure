@@ -1,0 +1,12 @@
+# non funziona in locale
+global:
+  defaultStorageClass: {{ .Values.defaultStorageClass }}
+  kibanaEnabled: false
+
+security:
+  elasticPassword: "jfKEFOEwyF"
+
+ingress:
+  enabled: true
+  hostname: elastic-{{ .Environment.Name }}.pcdacs.local
+  ingressClassName: "nginx"

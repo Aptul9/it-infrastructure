@@ -46,8 +46,6 @@ repositories:
   #   url: https://helm.datadoghq.com
   - name: camunda
     url: https://helm.camunda.io
-  - name: apache-tika
-    url: https://apache.jfrog.io/artifactory/tika
   - name: harbor
     url: https://helm.goharbor.io
   - name: wso2
@@ -155,6 +153,7 @@ releases:
 
   - name: metallb
     namespace: metallb-system
+    createNamespace: true
     chart: metallb/metallb
     version: 0.14.8
     installed: {{ .Values.installed.metalLB }}
@@ -206,15 +205,6 @@ releases:
       - longhorn-system/longhorn
       {{- end }}
 
-
-  - name: tika
-    namespace: tika
-    chart: apache-tika/tika
-    version: 2.9.0
-    createNamespace: true
-    installed: {{ .Values.installed.tika }}
-    values:
-      - dataflow/tika-values.gotmpl
 
   - name: nifikop
     namespace: nifi
@@ -290,6 +280,18 @@ releases:
     createNamespace: true
     installed: {{ .Values.installed.sonarqube }}
     version: 10.8.0
+    values:
+      - various/sonarqube-values.yaml.gotmpl
+    needs:
+      {{- if .Values.installed.longhorn }}
+      - longhorn-system/longhorn
+      {{- end }}
+
+  - name: elastic
+    namespace: elastic
+    chart: bitnami/elasticsearch
+    createNamespace: true
+    installed: {{ .Values.installed.sonarqube }}
     values:
       - various/sonarqube-values.yaml.gotmpl
     needs:
