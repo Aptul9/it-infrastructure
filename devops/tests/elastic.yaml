@@ -1,0 +1,12 @@
+# non funziona in locale
+global:
+  defaultStorageClass: longhorn
+  kibanaEnabled: false
+
+security:
+  elasticPassword: "password"
+
+ingress:
+  enabled: true
+  hostname: elasticsearch.local
+  ingressClassName: "nginx"

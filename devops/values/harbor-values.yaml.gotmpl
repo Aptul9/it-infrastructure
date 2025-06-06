@@ -1,11 +1,11 @@
 global:
-  defaultStorageClass: standard
+  defaultStorageClass: longhorn
 
 postgresql:
   enabled: false
 
 externalDatabase:
-  host: postgresql-col.pcdacs.local
+  host: "10.186.0.30"
   port: 5000
   user: harbor
   password: "harbor"
@@ -29,6 +29,6 @@ redis:
   enabled: false
 
 externalRedis:
-  host: redis-master.redis.svc.cluster.local
+  host: redis-master.cache.svc.cluster.local
   port: 6379
   password: "jfKEFOEwyF"

@@ -2,5 +2,8 @@ ingress:
   enabled: true
   host: longhorn-{{ .Environment.Name }}.pcdacs.local
   ingressClassName: nginx
+  tls: true
+  annotations:
+    cert-manager.io/cluster-issuer: "selfsigning-issuer"
 defaultSettings:
   defaultReplicaCount: {{ .Values.longhorn.volumeReplica }}

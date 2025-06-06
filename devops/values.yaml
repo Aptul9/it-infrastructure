@@ -6,5 +6,10 @@ installed:
   longhorn: true
   harbor: true
   sonarqube: true
+  redis: true
+  gitlab: true
 longhorn:
   volumeReplica: 1
+loadBalancerIpRange:
+  start: 10.186.0.50
+  end: 10.186.0.60

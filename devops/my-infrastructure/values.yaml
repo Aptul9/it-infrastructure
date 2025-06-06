@@ -1,0 +1,30 @@
+metallb:
+  enabled: true
+  ipAddressPool:
+    name: default-pool
+    ipRange:
+      start: 10.1.0.50
+      end: 10.1.0.60
+
+secretpullnamespaces:
+  - default
+
+gitlab:
+  postgresql:
+    password: "gitlab"
+  redis:
+    password: "jfKEFOEwyF"
+  storage:
+    connection: |
+      provider: AWS
+      region: us-east-1
+      aws_access_key_id: minioadmin
+      aws_secret_access_key: minioadmin123
+      aws_signature_version: 4
+      host: "10.186.0.121"
+      endpoint: "https://10.186.0.121:9000"
+      path_style: true
+
+nexus:
+  postgres:
+    password: "password"

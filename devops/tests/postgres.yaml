@@ -1,0 +1,9 @@
+global:
+  defaultStorageClass: longhorn
+
+auth:
+  enablePostgresUser: true
+  postgresPassword: "password"
+  username: "username"
+  password: "password"
+  database: "gitlab"

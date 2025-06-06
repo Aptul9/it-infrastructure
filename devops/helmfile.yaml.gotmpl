@@ -23,15 +23,16 @@ repositories:
     url: https://kubernetes.github.io/ingress-nginx
   - name: metallb
     url: https://metallb.github.io/metallb
-  - name: harbor
-    url: https://helm.goharbor.io
   - name: stevehipwell
     url: https://stevehipwell.github.io/helm-charts/
+  - name: gitlab
+    url: https://charts.gitlab.io
 
 releases:
 
   - name: ingress-nginx
     namespace: ingress-nginx
+    createNamespace: true
     chart: ingress-nginx/ingress-nginx
     installed: {{ .Values.installed.ingressNginx }}
 
@@ -39,6 +40,7 @@ releases:
   - name: longhorn
     namespace: longhorn-system
     chart: longhorn/longhorn
+    createNamespace: true
     installed: {{ .Values.installed.longhorn }}
     wait: true
     waitForJobs: true
@@ -74,34 +76,9 @@ releases:
     installed: {{ .Values.installed.metalLB }}
     wait: true #altrimenti fallisce la creazione di my-infrastructure
 
-# #chart usato per creare i CRD di metalLB al cluster, serve per gli indirizzi IP dei LoadBalancers
-#   - name: my-infrastructure
-#     namespace: my-infrastructure
-#     createNamespace: true
-#     chart: ./my-infrastructure
-#     # installed: {{ or .Values.installed.metalLB .Values.installed.datadog .Values.installed.rabbitMQ .Values.installed.nifikop}}
-#     installed: true
-#     wait: true
-#     waitForJobs: true
-#     needs:
-#       {{- if .Values.installed.metalLB }}
-#       - metallb-system/metallb
-#       {{- end }}
-#       {{- if .Values.installed.datadog }}
-#       - datadog/datadog-operator
-#       {{- end }}
-#       {{- if .Values.installed.rabbitMQ }}
-#       - rabbitmq-operator/rabbitmq 
-#       {{- end }}
-#       {{- if .Values.installed.nifikop }}
-#       - nifi/nifikop 
-#       {{- end }}
-#     values:
-#       - various/it-infrastructure-values.yaml.gotmpl
-
   - name: harbor
     namespace: harbor
-    chart: harbor/harbor
+    chart: bitnami/harbor
     createNamespace: true
     installed: {{ .Values.installed.harbor }}
     values:
@@ -111,31 +88,54 @@ releases:
       - longhorn-system/longhorn
       {{- end }}
 
-  - name: sonarqube
-    namespace: sonarqube
-    chart: bitnami/sonarqube
-    createNamespace: true
-    installed: {{ .Values.installed.sonarqube }}
-    version: 10.8.0
-    values:
-      - values/sonarqube-values.yaml.gotmpl
-    needs:
-      {{- if .Values.installed.longhorn }}
-      - longhorn-system/longhorn
-      {{- end }}
+  # - name: sonarqube
+  #   namespace: sonarqube
+  #   chart: bitnami/sonarqube
+  #   createNamespace: true
+  #   installed: {{ .Values.installed.sonarqube }}
+  #   version: 8.1.8
+  #   values:
+  #     - values/sonarqube-values.yaml.gotmpl
+  #   needs:
+  #     {{- if .Values.installed.longhorn }}
+  #     - longhorn-system/longhorn
+  #     {{- end }}
 
-- name: nexus
-  namespace: nexus
-  chart: stevehipwell/nexus3
-  createNamespace: true
-  installed: true
-  value:
-    - values/nexus-values.yaml.gotmpl
+  - name: nexus
+    namespace: nexus
+    chart: stevehipwell/nexus3
+    createNamespace: true
+    installed: true
+    values:
+      - values/nexus-values.yaml.gotmpl
 
   - name: redis
     namespace: cache
     chart: bitnami/redis
+    createNamespace: true
     version: 20.0.0
     installed: {{ .Values.installed.redis }}
     values:
       - values/redis-values.yaml
+
+  - name: my-infrastructure
+    namespace: my-infrastructure
+    createNamespace: true
+    chart: ./my-infrastructure
+    installed: true
+    wait: true
+    waitForJobs: true
+    needs:
+      {{- if .Values.installed.metalLB }}
+      - metallb-system/metallb
+      {{- end }}
+    values:
+      - values/my-infrastructure-values.yaml.gotmpl
+
+  - name: gitlab
+    namespace: gitlab
+    chart: gitlab/gitlab
+    createNamespace: true
+    installed: {{ .Values.installed.gitlab }}
+    values:
+      - values/gitlab-values.yaml.gotmpl

@@ -1,0 +1,7 @@
+metallb:
+  enabled: {{ .Values.installed.metalLB }}
+  ipAddressPool:
+    name: default-pool
+    ipRange:
+      start: {{ .Values.loadBalancerIpRange.start }}
+      end: {{ .Values.loadBalancerIpRange.end }}

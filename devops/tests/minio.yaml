@@ -1,0 +1,11 @@
+mode: standalone
+ingress:
+  enabled: true
+  hostname: minio.local
+  ingressClassName: nginx
+global:
+  defaultStorageClass: standard
+auth:
+  rootUser: admin
+  rootPassword: jfKEFOEwyF
+defaultBuckets: "gitlab-uploads, gitlab-artifacts, git-lfs, gitlab-packages, gitlab-backups"

@@ -13,6 +13,12 @@ grafana:
     ingressClassName: nginx
     hosts: 
       - grafana-{{ .Environment.Name }}.pcdacs.local
+    annotations:
+      cert-manager.io/cluster-issuer: "selfsigning-issuer"
+    tls:
+    - hosts:
+      - grafana-{{ .Environment.Name }}.pcdacs.local
+      secretName: grafana-{{ .Environment.Name }}-tls
 prometheus:
   prometheusSpec:
     routePrefix: /
@@ -31,6 +37,12 @@ prometheus:
       - prometheus-{{ .Environment.Name }}.pcdacs.local
     paths:
       - /
+    annotations:
+      cert-manager.io/cluster-issuer: "selfsigning-issuer"
+    tls:
+    - hosts:
+      - prometheus-{{ .Environment.Name }}.pcdacs.local
+      secretName: prometheus-{{ .Environment.Name }}-tls
 alertmanager:
   alertmanagerSpec:
     routePrefix: /
@@ -49,3 +61,9 @@ alertmanager:
       - alertmanager-{{ .Environment.Name }}.pcdacs.local
     paths:
       - /
+    annotations:
+      cert-manager.io/cluster-issuer: "selfsigning-issuer"
+    tls:
+    - hosts:
+      - alertmanager-{{ .Environment.Name }}.pcdacs.local
+      secretName: alertmanager-{{ .Environment.Name }}-tls

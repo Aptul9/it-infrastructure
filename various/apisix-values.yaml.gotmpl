@@ -1,0 +1,38 @@
+service:
+  type: ClusterIP
+  externalTrafficPolicy: null
+
+# global:
+#   storageClass: default
+
+ingress-controller:
+  enabled: true #this is needed to have CRDs
+  config:
+    apisix:
+      serviceNamespace: ingress-apisix
+      # here we must use a format like namespace/serviceName so change accordingly
+    ingressPublishService: ingress-apisix/apisix-gateway
+  # gateway:
+  #   # -- Apache APISIX service type for user access itself
+  #   type: ClusterIP
+
+dashboard:
+  enabled: {{ .Values | get "apisix.dashboardEnabled" "true" }}       
+
+ingress:
+  annotations:
+    cert-manager.io/cluster-issuer: "selfsigning-issuer"
+  tls:
+    - hosts:
+        - apisix-{{ .Environment.Name }}.pcdacs.local
+        - dashboard.apisix-{{ .Environment.Name }}.pcdacs.local
+      secretName: apisix-tls
+  enabled: true
+  className: nginx
+  hosts:
+    - host: apisix-{{ .Environment.Name }}.pcdacs.local
+      paths: 
+        - /
+    - host: dashboard.apisix-{{ .Environment.Name }}.pcdacs.local
+      paths: 
+        - /

@@ -13,7 +13,7 @@ ingress:
   enabled: true
   ingressClassName: nginx
   hosts:
-    - nexus.local
+    - nexus-{{ .Environment.Name }}.pcdacs.local
 
 # opz per usare postgres esterno, controllare
 env:
@@ -23,6 +23,6 @@ env:
       -Xmx2703M
       -Djava.util.prefs.userRoot=/nexus-data/javaprefs
       -Dnexus.datastore.enabled=true
-      -Dnexus.datastore.nexus.jdbcUrl=jdbc:postgresql://postgresql-col.pcdacs.local:5000/nexus
+      -Dnexus.datastore.nexus.jdbcUrl=jdbc:postgresql://10.186.0.30:5000/nexus
       -Dnexus.datastore.nexus.username=nexus
       -Dnexus.datastore.nexus.password=nexus

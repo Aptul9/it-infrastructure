@@ -1,7 +1,8 @@
 global:
   edition: ce
   hosts:
-    domain: {{ .Environment.Name }}.pcdacs.local
+    domain: gitlab.local
+    # externalIP: 162.55.183.230
   ingress:
     configureCertmanager: false
     class: nginx
@@ -97,7 +98,12 @@ gitlab-runner:
 nginx-ingress:
   enabled: false
 
-installCertmanager: false
+certmanager:
+  install: false
+# certmanager:
+#     The configuration key `certmanager.install` has been renamed to `installCertmanager`.
+#     Please update your values. The old value will be removed in GitLab 18.3/chart 9.3
+#     to update the bundled certmanager and to enable schema validation.
 
 registry:
   enabled: false
