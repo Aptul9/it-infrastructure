@@ -108,6 +108,11 @@ releases:
     installed: true
     values:
       - values/nexus-values.yaml.gotmpl
+    needs:
+      {{- if .Values.installed.longhorn }}
+      - longhorn-system/longhorn
+      {{- end }}
+      - my-infrastructure/my-infrastructure
 
   - name: redis
     namespace: cache
@@ -139,3 +144,9 @@ releases:
     installed: {{ .Values.installed.gitlab }}
     values:
       - values/gitlab-values.yaml.gotmpl
+    needs:
+      - my-infrastructure/my-infrastructure
+      - cache/redis
+      {{- if .Values.installed.longhorn }}
+      - longhorn-system/longhorn
+      {{- end }}
