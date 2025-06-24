@@ -1,5 +1,7 @@
 global:
   storageClass: {{ .Values.defaultStorageClass }}
+  security:
+    allowInsecureImages: true
 postgresql:
   enabled: false
   # auth:
@@ -9,25 +11,36 @@ ingress:
   enabled: true
   ingressClassName: nginx
   hostname: keycloak-{{ .Environment.Name }}.pcdacs.local
+  # hostname: identity-pcd-dev.cultura.gov.it
+  # annotations:
+  #   cert-manager.io/cluster-issuer: ca-issuer
+  #   cert-manager.io/common-name: identity-pcd-dev.cultura.gov.it
+  #   cert-manager.io/subject-organizationalunits: ACS IT
+  #   cert-manager.io/subject-organizations: ACS
+  tls: true
 adminIngress:
   enabled: true
   ingressClassName: nginx
   hostname: keycloak-admin-{{ .Environment.Name }}.pcdacs.local
+  # hostname: mgnt-identity-pcd-dev.cultura.gov.it
+  # annotations:
+  #   cert-manager.io/cluster-issuer: ca-issuer
+  #   cert-manager.io/common-name: mgnt-identity-pcd-dev.cultura.gov.it
+  #   cert-manager.io/subject-organizationalunits: ACS IT
+  #   cert-manager.io/subject-organizations: ACS
+  # tls: true
 auth:
   adminUser: admin
   adminPassword: jfKEFOEwyF
-# non funziona
 # keycloakConfigCli:
-#   enabled: true
 #   configuration:
 #     master.json: |
 #       {
 #         "realm" : "master",
 #         "attributes": {
-#           "frontendUrl": "https://keycloak-admin.local"
+#           "frontendUrl": "https://identity-pcd-dev.cultura.gov.it"
 #         }
 #       }
-
 # valori per riutilizzare il postgres che già abbiamo, cancellare global.postgresql.auth e mettere global.postgresql.enabled=false
 externalDatabase:
   host: {{ .Values.keycloak.externalDatabase.host }}
@@ -37,3 +50,10 @@ externalDatabase:
   database: {{ .Values.keycloak.externalDatabase.database }}
 
 replicaCount: {{ if or (eq .Environment.Name "prd") (eq .Environment.Name "col") }}2{{ else }}1{{ end }}
+
+# image:
+#   registry: harbor.rpv.beniculturali.it
+#   repository: pcd-com/keycloak
+#   tag: 26.2.4-debian-12-r0-acs
+#   pullSecrets:
+#     - harbor-registry-secret

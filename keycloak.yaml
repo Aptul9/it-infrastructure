@@ -8,18 +8,18 @@ postgresql:
 ingress:
   enabled: true
   ingressClassName: nginx
-  hostname: keycloak-prd.pcdacs.local
+  hostname: keycloak-test.pcdacs.local
 adminIngress:
   enabled: true
   ingressClassName: nginx
-  hostname: keycloak-admin-prd.pcdacs.local
+  hostname: keycloak-admin-test.pcdacs.local
 auth:
   adminUser: admin
   adminPassword: jfKEFOEwyF
 
 # valori per riutilizzare il postgres che già abbiamo, cancellare global.postgresql.auth e mettere global.postgresql.enabled=false
 externalDatabase:
-  host: postgresql-prd.pcdacs.local
+  host: postgresql-col.pcdacs.local
   port: 5000
   user: admin
   password: password
