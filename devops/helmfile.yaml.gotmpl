@@ -4,7 +4,7 @@ helmDefaults:
   timeout: 600
 
 environments:
-  default:
+  devops:
     values:
     - values.yaml
     kubeContext: acs_devops
@@ -27,6 +27,10 @@ repositories:
     url: https://stevehipwell.github.io/helm-charts/
   - name: gitlab
     url: https://charts.gitlab.io
+  - name: harbor
+    url: https://helm.goharbor.io
+  - name: sonarqube
+    url: https://sonarsource.github.io/helm-chart-sonarqube
 
 releases:
 
@@ -78,7 +82,7 @@ releases:
 
   - name: harbor
     namespace: harbor
-    chart: bitnami/harbor
+    chart: harbor/harbor
     createNamespace: true
     installed: {{ .Values.installed.harbor }}
     values:
@@ -88,18 +92,17 @@ releases:
       - longhorn-system/longhorn
       {{- end }}
 
-  # - name: sonarqube
-  #   namespace: sonarqube
-  #   chart: bitnami/sonarqube
-  #   createNamespace: true
-  #   installed: {{ .Values.installed.sonarqube }}
-  #   version: 8.1.8
-  #   values:
-  #     - values/sonarqube-values.yaml.gotmpl
-  #   needs:
-  #     {{- if .Values.installed.longhorn }}
-  #     - longhorn-system/longhorn
-  #     {{- end }}
+  - name: my-sonarqube
+    namespace: sonarqube
+    chart: sonarqube/sonarqube
+    createNamespace: true
+    installed: {{ .Values.installed.sonarqube }}
+    values:
+      - values/sonarqube-values.yaml.gotmpl
+    needs:
+      {{- if .Values.installed.longhorn }}
+      - longhorn-system/longhorn
+      {{- end }}
 
   - name: nexus
     namespace: nexus

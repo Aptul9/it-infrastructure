@@ -5,15 +5,17 @@ rootPassword:
   secret: nexus-password
   key: password
 
-# persistence:
-#   enabled: true
-#   storageClass: standard
+persistence:
+  enabled: true
+  storageClass: longhorn
 
 ingress:
   enabled: true
   ingressClassName: nginx
   hosts:
     - nexus-{{ .Environment.Name }}.pcdacs.local
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "101m"
 
 # opz per usare postgres esterno, controllare
 env:

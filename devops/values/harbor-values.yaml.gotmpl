@@ -1,45 +1,45 @@
-global:
-  defaultStorageClass: longhorn
+harborAdminPassword: "Harbor12345"
 
-postgresql:
+notary:
   enabled: false
 
-externalDatabase:
-  host: "10.186.0.30"
-  port: 5000
-  user: harbor
-  password: "harbor"
-  coreDatabase: harbor
-  sslmode: disable
+clair:
+  enabled: false
 
-exposureType: ingress
+expose:
+  ingress:
+    hosts:
+      core:  harbor-{{ .Environment.Name }}.pcdacs.local
+    className: nginx
+    controller: nginx
 
-ingress:
-  core:
-    enabled: true
-    hostname: harbor-{{ .Environment.Name }}.pcdacs.local
-    ingressClassName: nginx
+externalURL: "https://harbor-{{ .Environment.Name }}.pcdacs.local"
 
-adminPassword: "jfKEFOEwyF"
+database:
+  type: external
+  external:
+    host: "10.186.0.30"
+    port: "5000"
+    username: "harbor"
+    password: "harbor"
+    coreDatabase: "harbor"
+    # clairDatabase: "clair"
+    # notaryServerDatabase: "notary_server"
+    # notarySignerDatabase: "notary_signer"
 
 trivy:
   enabled: false
 
-redis:
-  enabled: false
-
-externalRedis:
-  host: redis-master.cache.svc.cluster.local
-  port: 6379
-  password: "jfKEFOEwyF"
-
-# all the following passwords must be 16 characters
-registry:
-  secret: j8JJBgxsro1SIoo4
-
-jobservice:
-  secret: j8JJBgxsro1SIoo4
-
-core:
-  secretKey: j8JJBgxsro1SIoo4
-  secret: j8JJBgxsro1SIoo4
+# works only for redis sentinel probably
+# redis:
+#   type: external
+#   external:
+#     host: "redis-master.cache.svc.cluster.local"
+#     port: "6379"
+#     coreDatabaseIndex: "0"
+#     # index 1 è occupato da gitlab
+#     jobserviceDatabaseIndex: "2"
+#     registryDatabaseIndex: "3"
+#     chartmuseumDatabaseIndex: "4"
+#     clairAdapterIndex: "5"
+#     password: "jfKEFOEwyF"

@@ -1,18 +1,23 @@
-### SonarQube Helm Chart Configuration using Bitnami Helm Chart
-global:
-  defaultStorageClass: standard
-
-externalDatabase:
-  host: "10.186.0.30"
-  user: "sonarqube"
-  password: "sonarqube"
-  database: sonarqube
-  port: 5000
-
+#default credentials is admin:admin, current password is jfKEFOEwyF123!
 postgresql:
   enabled: false
 
+jdbcOverwrite:
+  enabled: true
+  jdbcUrl: "jdbc:postgresql://10.186.0.30:5000/sonarqube"
+  jdbcUsername: "sonarqube"
+  jdbcPassword: "sonarqube"
+
+monitoringPasscode: "define_it"
+
+community:
+  enabled: true
+
 ingress:
   enabled: true
+  hosts:
+    - name: sonarqube-{{ .Environment.Name }}.pcdacs.local
+      path: /
+      pathType: Prefix
+  annotations: {}
   ingressClassName: nginx
-  hostname: sonarqube-{{ .Environment.Name }}.pcdacs.local
