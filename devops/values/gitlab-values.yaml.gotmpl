@@ -110,7 +110,6 @@ gitlab-runner:
     - name: gitlab-ca-cert
       configMap:
         name: gitlab-ca-cert
-
   volumeMounts:
     - name: gitlab-ca-cert
       mountPath: /etc/ssl/certs/cacert.pem
