@@ -2,9 +2,14 @@ global:
   edition: ce
   hosts:
     domain: {{ .Environment.Name }}.pcdacs.local
+    gitlab:
+      name: "gitlab-{{ .Environment.Name }}.pcdacs.local"
   ingress:
     configureCertmanager: false
     class: nginx
+    tls:
+      enabled: true
+      secretName: gitlab-tls
   kas:
     enabled: false
   registry:
@@ -93,6 +98,7 @@ prometheus:
 
 gitlab-runner:
   install: true
+  # runnerToken: "glrt-KNfikiN_c8xrzJQ29zKHiG86MQpwOjEKdDozCnU6MQ8.01.170h5r5a5"
   # runners:
   #   locked: null
     # secret: "nonempty"
@@ -100,17 +106,16 @@ gitlab-runner:
     #   [[runners]]
     #     [runners.kubernetes]
     #     image = "ubuntu:22.04"
-    #     {{- if .Values.global.minio.enabled }}
-    #     [runners.cache]
-    #       Type = "s3"
-    #       Path = "gitlab-runner"
-    #       Shared = true
-    #       [runners.cache.s3]
-    #         ServerAddress = {{ include "gitlab-runner.cache-tpl.s3ServerAddress" . }}
-    #         BucketName = "runner-cache"
-    #         BucketLocation = "us-east-1"
-    #         Insecure = true
-    #     {{ end }}
+  volumes:
+    - name: gitlab-ca-cert
+      configMap:
+        name: gitlab-ca-cert
+
+  volumeMounts:
+    - name: gitlab-ca-cert
+      mountPath: /etc/ssl/certs/cacert.pem
+      subPath: cacert.pem
+      readOnly: true
 nginx-ingress:
   enabled: false
 
