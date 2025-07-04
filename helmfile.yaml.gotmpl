@@ -46,12 +46,8 @@ repositories:
     url: https://helm.camunda.io
   - name: apisix
     url: https://charts.apiseven.com
-  # - name: harbor
-  #   url: https://helm.goharbor.io
-  # - name: wso2
-  #   url: https://helm.wso2.com
-  # - name: sonarqube
-  #   url: https://SonarSource.github.io/helm-chart-sonarqube
+  - name: harbor
+    url: https://helm.goharbor.io
   # - name: datadog
   #   url: https://helm.datadoghq.com
 
@@ -195,18 +191,19 @@ releases:
   #   installed: {{ .Values.installed.datadog }}
   #   wait: true
 
-  # - name: camunda
-  #   namespace: camunda
-  #   chart: camunda/camunda-platform
-  #   createNamespace: true
-  #   installed: {{ .Values.installed.camunda }}
-  #   values:
-  #     - various/camunda-values.yaml.gotmpl
-  #   needs:
-  #     - ingress-nginx/ingress-nginx
-  #     {{- if .Values.installed.longhorn }}
-  #     - longhorn-system/longhorn
-  #     {{- end }}
+  - name: camunda
+    namespace: camunda
+    chart: camunda/camunda-platform
+    version: 10.8.0
+    createNamespace: true
+    installed: {{ .Values.installed.camunda }}
+    values:
+      - various/camunda-values.yaml.gotmpl
+    needs:
+      - ingress-nginx/ingress-nginx
+      {{- if .Values.installed.longhorn }}
+      - longhorn-system/longhorn
+      {{- end }}
 
 
   - name: nifikop
@@ -256,57 +253,31 @@ releases:
     namespace: ingress-apisix
     createNamespace: true
     chart: apisix/apisix
+    installed: {{ .Values.installed.apisix }}
     version: 2.10.0
     values:
       - various/apisix-values.yaml.gotmpl
 
+  - name: harbor
+    namespace: harbor
+    chart: harbor/harbor
+    createNamespace: true
+    installed: {{ .Values.installed.harbor }}
+    values:
+      - various/harbor-values.yaml.gotmpl
+    needs:
+      {{- if .Values.installed.longhorn }}
+      - longhorn-system/longhorn
+      {{- end }}
 
-  # - name: harbor
-  #   namespace: harbor
-  #   chart: harbor/harbor
-  #   createNamespace: true
-  #   installed: {{ .Values.installed.harbor }}
-  #   values:
-  #     - various/harbor-values.yaml.gotmpl
-  #   needs:
-  #     {{- if .Values.installed.longhorn }}
-  #     - longhorn-system/longhorn
-  #     {{- end }}
-
-  # - name: wso2
-  #   namespace: wso2
-  #   chart: wso2/am-pattern-1
-  #   createNamespace: true
-  #   installed: {{ .Values.installed.wso2 }}
-  #   version: 4.2.0-2
-  #   values:
-  #     - various/wso2-values.yaml.gotmpl
-  #   needs:
-  #     {{- if .Values.installed.longhorn }}
-  #     - longhorn-system/longhorn
-  #     {{- end }}
-
-  # - name: sonarqube
-  #   namespace: sonarqube
-  #   chart: sonarqube/sonarqube
-  #   createNamespace: true
-  #   installed: {{ .Values.installed.sonarqube }}
-  #   version: 10.8.0
-  #   values:
-  #     - various/sonarqube-values.yaml.gotmpl
-  #   needs:
-  #     {{- if .Values.installed.longhorn }}
-  #     - longhorn-system/longhorn
-  #     {{- end }}
-
-  # - name: elastic
-  #   namespace: elastic
-  #   chart: bitnami/elasticsearch
-  #   createNamespace: true
-  #   installed: {{ .Values.installed.sonarqube }}
-  #   values:
-  #     - various/sonarqube-values.yaml.gotmpl
-  #   needs:
-  #     {{- if .Values.installed.longhorn }}
-  #     - longhorn-system/longhorn
-  #     {{- end }}
+  - name: elastic
+    namespace: elastic
+    chart: bitnami/elasticsearch
+    createNamespace: true
+    installed: {{ .Values.installed.elastic }}
+    values:
+      - db-queues/elastic-values.yaml.gotmpl
+    needs:
+      {{- if .Values.installed.longhorn }}
+      - longhorn-system/longhorn
+      {{- end }}

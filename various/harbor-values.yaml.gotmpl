@@ -1,57 +1,45 @@
+harborAdminPassword: "Harbor12345"
+
+notary:
+  enabled: false
+
+clair:
+  enabled: false
+
 expose:
   ingress:
     hosts:
-      core: harbor-{{ .Environment.Name }}.pcdacs.local
+      core:  harbor-{{ .Environment.Name }}.pcdacs.local
     className: nginx
-externalURL: https://harbor-{{ .Environment.Name }}.pcdacs.local
-persistence:
-  persistentVolumeClaim:
-    registry:
-      storageClass: {{ .Values.defaultStorageClass }}
-    jobservice:
-      jobLog:
-        storageClass: {{ .Values.defaultStorageClass }}
-    database:
-      storageClass: {{ .Values.defaultStorageClass }}
-    redis:
-      storageClass: {{ .Values.defaultStorageClass }}
-    trivy:
-      storageClass: {{ .Values.defaultStorageClass }}
-harborAdminPassword: jfKEFOEwyF
+    controller: nginx
 
-## valori per bitnami/harbor
+externalURL: "https://harbor-{{ .Environment.Name }}.pcdacs.local"
 
-# global:
-#   defaultStorageClass: standard
+database:
+  type: external
+  external:
+    host: "postgresql-prd.pcdacs.local"
+    port: "5000"
+    username: "harbor"
+    password: "harbor"
+    coreDatabase: "harbor"
+    # clairDatabase: "clair"
+    # notaryServerDatabase: "notary_server"
+    # notarySignerDatabase: "notary_signer"
 
-# postgresql:
-#   enabled: false
+trivy:
+  enabled: false
 
-# externalDatabase:
-#   host: postgres-postgresql.postgres.svc.cluster.local
-#   port: 5432
-#   user: username
-#   password: "password"
-#   coreDatabase: harbor
-#   sslmode: disable
-
-# exposureType: ingress
-
-# ingress:
-#   core:
-#     enabled: true
-#     hostname: harbor.local
-#     ingressClassName: nginx
-
-# adminPassword: "jfKEFOEwyF"
-
-# trivy:
-#   enabled: false
-
+# works only for redis sentinel probably
 # redis:
-#   enabled: false
-
-# externalRedis:
-#   host: redis-master.redis.svc.cluster.local
-#   port: 6379
-#   password: "jfKEFOEwyF"
+#   type: external
+#   external:
+#     host: "redis-master.cache.svc.cluster.local"
+#     port: "6379"
+#     coreDatabaseIndex: "0"
+#     # index 1 è occupato da gitlab
+#     jobserviceDatabaseIndex: "2"
+#     registryDatabaseIndex: "3"
+#     chartmuseumDatabaseIndex: "4"
+#     clairAdapterIndex: "5"
+#     password: "jfKEFOEwyF"

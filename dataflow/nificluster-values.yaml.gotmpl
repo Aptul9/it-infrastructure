@@ -59,7 +59,7 @@ ingress:
               name: "nifi-cluster-ip"
               port:
                 number: 8080
-  tls: []
-  #  - secretName: nifi-cluster-tls
-  #    hosts:
-  #      - my-host.example.com
+  tls:
+   - secretName: nifi-cluster-tls
+     hosts:
+       - nifi-{{ .Environment.Name }}.pcdacs.local

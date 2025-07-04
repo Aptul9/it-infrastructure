@@ -9,17 +9,16 @@ installed:
   prometheusStack: true
   rabbitMQ: true
   redis: true
-  mongoDB: true
+  mongoDB: false
   datadog: false
   nifi: true
   camunda: true
   tika: true
   nifikop: true
   keycloak: true
-  harbor: false
-  wso2: false
-  sonarqube: false
+  harbor: true
   elastic: false
+  apisix: true
 loadBalancerIpRange:
   start: 10.32.11.50
   end: 10.32.11.60

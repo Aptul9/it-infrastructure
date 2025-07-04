@@ -1,49 +1,75 @@
 global:
-  ingress:
-    enabled: true
-    host: camunda-{{ .Environment.Name }}.pcdacs.local
+  # ingress:
+  #   enabled: true
+  #   host: camunda-{{ .Environment.Name }}.pcdacs.local
   identity:
     auth:
-      tasklist:
-        existingSecret: jfKEFOEwyF
-      optimize:
-        existingSecret: jfKEFOEwyF
-      operate:
-        existingSecret: jfKEFOEwyF
-      connectors:
-        existingSecret: jfKEFOEwyF
-      zeebe:
-        existingSecret: jfKEFOEwyF
-      console:
-        existingSecret: jfKEFOEwyF
-      postgresql:
-        auth:
-          postgresPassword: jfKEFOEwyF
+      enabled: false
+      # tasklist:
+      #   existingSecret: jfKEFOEwyF
+      # optimize:
+      #   existingSecret: jfKEFOEwyF
+      # operate:
+      #   existingSecret: jfKEFOEwyF
+      # connectors:
+      #   existingSecret: jfKEFOEwyF
+      # zeebe:
+      #   existingSecret: jfKEFOEwyF
+      # console:
+      #   existingSecret: jfKEFOEwyF
+      # postgresql:
+      #   auth:
+      #     postgresPassword: jfKEFOEwyF
 zeebe:
   pvcSize: 16Gi
   pvcStorageClassName: {{ .Values.defaultStorageClass }}
-  image:
-    tag: 8.5.8
-zeebeGateway:
-  image: 
-    tag: 8.5.8
-  ingress:
-    grpc:
-      enabled: true
-      host: "zeebe-grpc-{{ .Environment.Name }}.pcdacs.local"
-    rest:
-      enabled: true
-      host: "zeebe-rest-{{ .Environment.Name }}.pcdacs.local"
+# zeebeGateway:
+#   ingress:
+#     grpc:
+#       enabled: true
+#       host: "zeebe-grpc-{{ .Environment.Name }}.pcdacs.local"
+#     rest:
+#       enabled: true
+#       host: "zeebe-rest-{{ .Environment.Name }}.pcdacs.local"
 identity:
-  keycloak:
-    auth:
-      adminPassword: jfKEFOEwyF
-      managementPassword: jfKEFOEwyF
-    postgresql:
-      auth:
-        password: jfKEFOEwyF
+  enabled: false
+  # keycloak:
+  #   auth:
+  #     adminPassword: jfKEFOEwyF
+  #     managementPassword: jfKEFOEwyF
+  #   postgresql:
+  #     auth:
+  #       password: jfKEFOEwyF
 
 elasticsearch:
   master:
     persistence:
       size: 24Gi
+
+tasklist:
+  enabled: false
+
+optimize:
+  enabled: false
+
+identityKeycloak:
+  enabled: false
+
+connectors:
+  enabled: false
+
+operate:
+  ingress:
+    enabled: true
+    path: /
+    pathType: Prefix
+    className: "nginx"
+    annotations:
+      cert-manager.io/cluster-issuer: "selfsigning-issuer"
+      cert-manager.io/common-name: "camunda-operate-{{ .Environment.Name }}.pcdacs.local"
+      cert-manager.io/subject-organizationalunits: "ACS IT"
+      cert-manager.io/subject-organizations: "ACS"
+    host: "camunda-operate-{{ .Environment.Name }}.pcdacs.local"
+    tls:
+      enabled: true
+      secretName: camunda-operate-{{ .Environment.Name }}-tls

@@ -98,14 +98,19 @@ prometheus:
 
 gitlab-runner:
   install: true
-  # runnerToken: "glrt-KNfikiN_c8xrzJQ29zKHiG86MQpwOjEKdDozCnU6MQ8.01.170h5r5a5"
-  # runners:
-  #   locked: null
-    # secret: "nonempty"
-    # config: |
-    #   [[runners]]
-    #     [runners.kubernetes]
-    #     image = "ubuntu:22.04"
+  # runnerToken: "glrt-KNfikiN_c8xrzJQ29zKHiG86MQpwOjEKdDozCnU6MQ8.01.170h5r5a5"         pre_build_script = "while [ ! -f /certs/client/ca.pem ]; do sleep 1; done"
+  runners:
+    config: |
+      [[runners]]
+        [runners.kubernetes]
+          namespace = "gitlab"
+          image = "ubuntu:20.04"
+          privileged = true
+        [[runners.kubernetes.volumes.empty_dir]]
+          name = "docker-certs"
+          mount_path = "/certs/client"
+          medium = "Memory"
+
   volumes:
     - name: gitlab-ca-cert
       configMap:

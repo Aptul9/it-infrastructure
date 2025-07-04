@@ -16,9 +16,8 @@ installed:
   nifikop: true
   keycloak: false
   harbor: false
-  wso2: false
-  sonarqube: false
   elastic: true
+  apisix: true
 loadBalancerIpRange:
   start: 10.11.0.50
   end: 10.11.0.60
