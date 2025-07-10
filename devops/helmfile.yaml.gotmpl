@@ -31,7 +31,8 @@ repositories:
     url: https://helm.goharbor.io
   - name: sonarqube
     url: https://sonarsource.github.io/helm-chart-sonarqube
-
+  - name: argo
+    url: https://argoproj.github.io/argo-helm
 releases:
 
   - name: ingress-nginx
@@ -153,3 +154,11 @@ releases:
       {{- if .Values.installed.longhorn }}
       - longhorn-system/longhorn
       {{- end }}
+
+  - name: argo-cd
+    namespace: argocd
+    chart: argo/argo-cd
+    createNamespace: true
+    installed: {{ .Values.installed.argoCD }}
+    values:
+      - values/argo-cd-values.yaml.gotmpl

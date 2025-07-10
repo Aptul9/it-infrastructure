@@ -8,6 +8,7 @@ installed:
   sonarqube: true
   redis: true
   gitlab: true
+  argoCD: true
 longhorn:
   volumeReplica: 1
 loadBalancerIpRange:

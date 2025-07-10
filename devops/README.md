@@ -83,3 +83,21 @@ gitlab-runner:
       subPath: cacert.pem
       readOnly: true
 ```
+
+## Known Bugs
+We must use the ipv4 stack in the runners, otherwise we might run into connectivity issues, as now we have not been able to enforce this cluster-wide, so we will specify it on a per-container or per-command basis.
+As now we have been able to achieve this as the following:
+In the maven build command:
+
+`mvn --batch-mode -s settings.xml -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses=true clean deploy`
+
+And in the Docker in Docker container:
+```
+build_image:
+  stage: test
+  image:
+    name: docker:20.10.16
+  services:
+    - name: docker:20.10.16-dind
+      command: ["--insecure-registry=harbor-devops.pcdacs.local", "--ipv6=false"]
+```

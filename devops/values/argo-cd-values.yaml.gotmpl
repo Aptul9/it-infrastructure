@@ -1,0 +1,16 @@
+server:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hostname: argocd-{{ .Environment.Name }}.pcdacs.local
+    tls: false
+
+configs:
+  params:
+    server.insecure: true
+
+    # -- Bcrypt hashed admin password
+    ## Argo expects the password in the secret to be bcrypt hashed. You can create this hash with
+    ## `htpasswd -nbBC 10 "" password | tr -d ':\n' | sed 's/$2y/$2a/'`
+  secret:
+    argocdServerAdminPassword: "$2a$10$ceNoVsNty..DEpVad4cWEO3JU707U/p23eBNnPNPRSFsgeKJsMWQi"

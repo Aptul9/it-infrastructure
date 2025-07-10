@@ -102,14 +102,20 @@ gitlab-runner:
   runners:
     config: |
       [[runners]]
+        pre_get_sources_script = "for i in $(seq 1 5);do getent hosts gitlab-devops.pcdacs.local && break || sleep 1;done"
         [runners.kubernetes]
           namespace = "gitlab"
           image = "ubuntu:20.04"
           privileged = true
-        [[runners.kubernetes.volumes.empty_dir]]
-          name = "docker-certs"
-          mount_path = "/certs/client"
-          medium = "Memory"
+          host_network = true
+          dns_config = { nameservers = ["10.1.0.4", "10.1.0.5"] }
+          [[runners.kubernetes.volumes.empty_dir]]
+            name = "docker-certs"
+            mount_path = "/certs/client"
+            medium = "Memory"
+          [[runners.kubernetes.dns_config.options]]
+            name = "ndots"
+            value = "1"
 
   volumes:
     - name: gitlab-ca-cert
