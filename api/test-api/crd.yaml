@@ -1,0 +1,83 @@
+apiVersion: apisix.apache.org/v2
+kind: ApisixUpstream
+metadata:
+  name: sticky-session-upstream
+  namespace: ingress-apisix
+spec:
+  loadbalancer:
+    type: chash
+    hashOn: cookie
+    key: "custom_session_cookie"
+  discovery:
+    type: kubernetes
+    serviceName: flask-test-api-service
+---
+# Route di base
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  name: my-sticky-session-route
+  namespace: ingress-apisix
+spec:
+  http:
+  - name: route-with-sticky-session
+    match:
+      hosts:
+      - test-crd.apisix.local
+      paths:
+      - /api/*
+    backends:
+    - serviceName: flask-test-api-service
+      servicePort: 80
+      weight: 100
+---
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  name: simple-rewrite-route
+  namespace: ingress-apisix
+spec:
+  http:
+  - name: route-with-simple-rewrite
+    match:
+      hosts:
+      - test-crd.apisix.local
+      paths:
+      - /old-api/*
+    backends:
+    - serviceName: flask-test-api-service
+      servicePort: 80
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri: ["^/old-api/(.*)", "/new-api/$1"]
+        headers:
+          X-Custom-Header: "rewritten-value"
+          X-Original-URI: "$uri"
+---
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  name: simple-rewrite-route-no-regex
+  namespace: ingress-apisix
+spec:
+  http:
+  - name: route-with-simple-rewrite
+    match:
+      hosts:
+      - test-crd.apisix.local
+      paths:
+      - /old-api-no-regex/*
+    backends:
+    - serviceName: flask-test-api-service
+      servicePort: 80
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        uri: "/new-api$uri_param"
+        # regex_uri: ["^/old-api/(.*)", "/new-api/$1"]
+        headers:
+          X-Custom-Header: "rewritten-value"
+          X-Original-URI: "$uri"

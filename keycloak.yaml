@@ -8,11 +8,11 @@ postgresql:
 ingress:
   enabled: true
   ingressClassName: nginx
-  hostname: keycloak-test.pcdacs.local
+  hostname: keycloak-col.pcdacs.local
 adminIngress:
   enabled: true
   ingressClassName: nginx
-  hostname: keycloak-admin-test.pcdacs.local
+  hostname: keycloak-admin-col.pcdacs.local
 auth:
   adminUser: admin
   adminPassword: jfKEFOEwyF
