@@ -1,3 +1,5 @@
+-- In the end it is unnecessary, just create a user and give it the ownership of the database is enough
+
 -- 1. Create the user
 CREATE USER gitlab WITH PASSWORD 'gitlab';
 

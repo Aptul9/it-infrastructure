@@ -1,0 +1,29 @@
+# ./argo-acs-dev-app.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  # The name of the Argo CD Application resource
+  name: acs-dev-configmap-app
+  # Must be in the Argo CD namespace
+  namespace: argocd 
+spec:
+  project: default
+
+  # Source Git repository
+  source:
+    repoURL: 'https://gitlab-devops.pcdacs.local/root/argo-test.git'
+    path: '.' # The subdirectory containing the manifests for this cluster
+    targetRevision: HEAD
+
+  # Destination cluster
+  destination:
+    # Here we use the friendly name. This is the recommended way!
+    server: 'https://rancher-dv.pcdacs.local:6443'
+    # The target namespace on the acs-dev cluster
+    namespace: default 
+
+  # Optional: Enable auto-sync for a true GitOps workflow
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

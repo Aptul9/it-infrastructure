@@ -1,0 +1,22 @@
+# ./argo-application.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  # The name of the Argo CD Application itself
+  name: argo-test-app
+  # This MUST be deployed in the namespace where Argo CD is installed (usually 'argocd')
+  namespace: argocd
+spec:
+  # The Argo CD project this application belongs to
+  project: default
+
+  # Source is the Git repository
+  source:
+    repoURL: 'https://gitlab-devops.pcdacs.local/root/argo-test.git' # <-- IMPORTANT: Use your repo URL
+    path: '.'  # '.' means the root of the repo. If you put the file in a 'manifests' folder, you would put 'manifests' here.
+    targetRevision: HEAD # HEAD means the latest commit on the default branch
+
+  # Destination is where to deploy the manifests
+  destination:
+    server: 'https://kubernetes.default.svc' # This means the same cluster Argo CD is in
+    namespace: default # This is the target namespace for the ConfigMap

@@ -15,7 +15,7 @@ installed:
   camunda: true
   tika: true
   nifikop: true
-  keycloak: false
+  keycloak: true
   harbor: false
   elastic: true
   apisix: true
@@ -28,6 +28,6 @@ keycloak:
   externalDatabase:
     host: "10.2.0.11"
     port: 5432
-    user: postgres
-    password: password
-    database: keycloak
+    user: keycloak
+    password: keycloak
+    database: keycloak_dev
