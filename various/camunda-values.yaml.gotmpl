@@ -23,14 +23,14 @@ global:
 zeebe:
   pvcSize: 16Gi
   pvcStorageClassName: {{ .Values.defaultStorageClass }}
-# zeebeGateway:
-#   ingress:
-#     grpc:
-#       enabled: true
-#       host: "zeebe-grpc-{{ .Environment.Name }}.pcdacs.local"
-#     rest:
-#       enabled: true
-#       host: "zeebe-rest-{{ .Environment.Name }}.pcdacs.local"
+zeebeGateway:
+  ingress:
+    grpc:
+      enabled: true
+      host: "zeebe-grpc-{{ .Environment.Name }}.pcdacs.local"
+    rest:
+      enabled: true
+      host: "zeebe-rest-{{ .Environment.Name }}.pcdacs.local"
 identity:
   enabled: false
   # keycloak:
