@@ -7,6 +7,8 @@ global:
   ingress:
     configureCertmanager: false
     class: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-body-size: "500m"
     tls:
       enabled: true
       secretName: gitlab-tls
@@ -103,6 +105,8 @@ gitlab-runner:
     config: |
       [[runners]]
         pre_get_sources_script = "for i in $(seq 1 5);do getent hosts gitlab-devops.pcdacs.local && break || sleep 1;done"
+        url = "https://gitlab-devops.pcdacs.local"
+        clone_url = "https://gitlab-devops.pcdacs.local"
         [runners.kubernetes]
           namespace = "gitlab"
           image = "ubuntu:20.04"

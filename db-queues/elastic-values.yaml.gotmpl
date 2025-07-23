@@ -10,3 +10,12 @@ ingress:
   enabled: true
   hostname: elastic-{{ .Environment.Name }}.pcdacs.local
   ingressClassName: "nginx"
+
+data:
+  replicaCount: 1
+  persistence:
+    size: 2Gi
+master:
+  replicaCount: 1
+  persistence:
+    size: 2Gi

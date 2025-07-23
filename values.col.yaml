@@ -22,6 +22,7 @@ installed:
 loadBalancerIpRange:
   start: 10.32.1.50
   end: 10.32.1.60
+subNet: 10.32.1
 longhorn:
   volumeReplica: 1
 keycloak:

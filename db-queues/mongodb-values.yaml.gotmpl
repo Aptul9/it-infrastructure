@@ -1,6 +1,14 @@
 useStatefulSet: true
 architecture: replicaset
 storageClass: {{ .Values.defaultStorageClass }}
+replicaCount: 1
 auth:
   rootPassword: jfKEFOEwyF
   replicaSetKey: jfKEFOEwyF
+persistence:
+  size: 2Gi
+externalAccess:
+  enabled: true
+  service:
+    loadBalancerIPs:
+      - "{{ .Values.subNet }}.51"
