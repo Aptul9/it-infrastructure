@@ -30,6 +30,11 @@ database:
 trivy:
   enabled: false
 
+persistence:
+  persistentVolumeClaim:
+    registry:
+      size: "10Gi"
+
 # works only for redis sentinel probably
 # redis:
 #   type: external

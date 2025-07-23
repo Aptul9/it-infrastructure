@@ -1,3 +1,12 @@
 global:
   redis:
     password: "jfKEFOEwyF"
+
+replica:
+  replicaCount: 1
+  persistence:
+    size: "1Gi"
+
+master:
+  persistence:
+    size: "1Gi"
