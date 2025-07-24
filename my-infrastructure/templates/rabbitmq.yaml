@@ -16,4 +16,29 @@ spec:
     additionalConfig: |
       default_user=admin
       default_pass=password
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rabbitmq-management
+  namespace: rabbit
+  annotations:
+    cert-manager.io/cluster-issuer: "internal-ca"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: rabbitmq-console-{{ .Values.environment }}.pdcacs.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: rabbitmqcluster
+                port:
+                  number: 15672
+  tls:
+    - hosts:
+        - rabbitmq-console-{{ .Values.environment }}.pdcacs.local
+      secretName: rabbitmq-management-tls
 {{- end }}

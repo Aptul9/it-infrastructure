@@ -1,0 +1,95 @@
+{{- if .Values.minIOproxy.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio-api-external
+  namespace: minio
+spec:
+  ports:
+    - name: api
+      port: 9000
+      targetPort: 9000
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: minio-api-external
+  namespace: minio
+subsets:
+  - addresses:
+      - ip: 10.3.0.11
+    ports:
+      - port: 9000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio-console-external
+  namespace: minio
+spec:
+  ports:
+    - name: console
+      port: 9001
+      targetPort: 9001
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: minio-console-external
+  namespace: minio
+subsets:
+  - addresses:
+      - ip: 10.3.0.11
+    ports:
+      - port: 9001
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minio-api-ingress
+  namespace: minio
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: minio-api-dev.pdcacs.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: minio-api-external
+                port:
+                  number: 9000
+  # Uncomment for TLS
+  # tls:
+  #   - hosts:
+  #       - minio-api.example.com
+  #     secretName: minio-api-tls
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minio-console-ingress
+  namespace: minio
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: minio-console-dev.pdcacs.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: minio-console-external
+                port:
+                  number: 9001
+  # Uncomment for TLS
+  # tls:
+  #   - hosts:
+  #       - minio-console.example.com
+  #     secretName: minio-console-tls
+{{- end }}

@@ -6,22 +6,22 @@ helmDefaults:
 environments:
   default:
     values:
-    - values.dev.yaml
+    - envs/values.dev.yaml
   dev:
     values:
-    - values.dev.yaml
+    - envs/values.dev.yaml
     kubeContext: acs_dev
   int:
     values:
-    - values.int.yaml
+    - envs/values.int.yaml
     kubeContext: acs_int
   col:
     values:
-    - values.col.yaml
+    - envs/values.col.yaml
     kubeContext: acs_col
   prd:
     values:
-    - values.prd.yaml
+    - envs/values.prd.yaml
     kubeContext: acs_prd
 ---
 
@@ -242,18 +242,18 @@ releases:
       - longhorn-system/longhorn
       {{- end }}
 
-  - name: keycloak
-    namespace: keycloak
-    chart: bitnami/keycloak
-    createNamespace: true
-    version: 24.7.5
-    installed: {{ .Values.installed.keycloak }}
-    values:
-      - various/keycloak-values.yaml.gotmpl
-    needs:
-      {{- if .Values.installed.longhorn }}
-      - longhorn-system/longhorn
-      {{- end }}
+  # - name: keycloak
+  #   namespace: keycloak
+  #   chart: bitnami/keycloak
+  #   createNamespace: true
+  #   version: 24.7.5
+  #   installed: {{ .Values.installed.keycloak }}
+  #   values:
+  #     - various/keycloak-values.yaml.gotmpl
+  #   needs:
+  #     {{- if .Values.installed.longhorn }}
+  #     - longhorn-system/longhorn
+  #     {{- end }}
 
   - name: apisix
     namespace: ingress-apisix

@@ -1,7 +1,7 @@
 useStatefulSet: true
 architecture: replicaset
 storageClass: {{ .Values.defaultStorageClass }}
-replicaCount: 1
+replicaCount: 2
 auth:
   rootPassword: jfKEFOEwyF
   replicaSetKey: jfKEFOEwyF
@@ -12,3 +12,4 @@ externalAccess:
   service:
     loadBalancerIPs:
       - "{{ .Values.subNet }}.51"
+      - "{{ .Values.subNet }}.52"

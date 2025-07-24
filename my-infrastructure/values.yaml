@@ -29,3 +29,8 @@ nifi:
 
 secretpullnamespaces:
   - default
+
+environment: dev
+
+minIOproxy:
+  enabled: true

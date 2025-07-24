@@ -19,6 +19,7 @@ installed:
   harbor: true
   elastic: false
   apisix: true
+  minIOproxy: false
 loadBalancerIpRange:
   start: 10.32.11.50
   end: 10.32.11.60

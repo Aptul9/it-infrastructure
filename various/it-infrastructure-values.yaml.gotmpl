@@ -29,3 +29,8 @@ nifi:
 
 secretpullnamespaces:
   - default
+
+environment: {{ .Environment.Name }}
+
+minIOproxy:
+  enabled: {{ .Values.installed.minIOproxy }}
