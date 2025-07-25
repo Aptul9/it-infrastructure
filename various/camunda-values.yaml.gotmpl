@@ -65,7 +65,8 @@ operate:
     pathType: Prefix
     className: "nginx"
     annotations:
-      cert-manager.io/cluster-issuer: "selfsigning-issuer"
+      cert-manager.io/cluster-issuer: "my-internal-ca"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
       cert-manager.io/common-name: "camunda-operate-{{ .Environment.Name }}.pcdacs.local"
       cert-manager.io/subject-organizationalunits: "ACS IT"
       cert-manager.io/subject-organizations: "ACS"

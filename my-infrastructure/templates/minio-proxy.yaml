@@ -1,5 +1,12 @@
 {{- if .Values.minIOproxy.enabled }}
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: minio
+  labels:
+    name: minio
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: minio-api-external
@@ -50,10 +57,12 @@ metadata:
   namespace: minio
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    cert-manager.io/cluster-issuer: "my-internal-ca"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   ingressClassName: nginx
   rules:
-    - host: minio-api-dev.pdcacs.local
+    - host: minio-api-{{ .Values.environment }}.pdcacs.local
       http:
         paths:
           - path: /
@@ -63,21 +72,23 @@ spec:
                 name: minio-api-external
                 port:
                   number: 9000
-  # Uncomment for TLS
-  # tls:
-  #   - hosts:
-  #       - minio-api.example.com
-  #     secretName: minio-api-tls
+  tls:
+    - hosts:
+        - minio-api-{{ .Values.environment }}.pdcacs.local
+      secretName: minio-api-tls
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: minio-console-ingress
   namespace: minio
+  annotations:
+    cert-manager.io/cluster-issuer: "my-internal-ca"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   ingressClassName: nginx
   rules:
-    - host: minio-console-dev.pdcacs.local
+    - host: minio-console-{{ .Values.environment }}.pdcacs.local
       http:
         paths:
           - path: /
@@ -87,9 +98,8 @@ spec:
                 name: minio-console-external
                 port:
                   number: 9001
-  # Uncomment for TLS
-  # tls:
-  #   - hosts:
-  #       - minio-console.example.com
-  #     secretName: minio-console-tls
+  tls:
+    - hosts:
+        - minio-console-{{ .Values.environment }}.pdcacs.local
+      secretName: minio-console-tls
 {{- end }}

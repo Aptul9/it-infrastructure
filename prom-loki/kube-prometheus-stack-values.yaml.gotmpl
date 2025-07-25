@@ -14,7 +14,8 @@ grafana:
     hosts: 
       - grafana-{{ .Environment.Name }}.pcdacs.local
     annotations:
-      cert-manager.io/cluster-issuer: "selfsigning-issuer"
+      cert-manager.io/cluster-issuer: "my-internal-ca"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
     tls:
     - hosts:
       - grafana-{{ .Environment.Name }}.pcdacs.local
@@ -38,7 +39,8 @@ prometheus:
     paths:
       - /
     annotations:
-      cert-manager.io/cluster-issuer: "selfsigning-issuer"
+      cert-manager.io/cluster-issuer: "my-internal-ca"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
     tls:
     - hosts:
       - prometheus-{{ .Environment.Name }}.pcdacs.local
@@ -62,7 +64,8 @@ alertmanager:
     paths:
       - /
     annotations:
-      cert-manager.io/cluster-issuer: "selfsigning-issuer"
+      cert-manager.io/cluster-issuer: "my-internal-ca"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
     tls:
     - hosts:
       - alertmanager-{{ .Environment.Name }}.pcdacs.local

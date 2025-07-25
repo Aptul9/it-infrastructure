@@ -24,6 +24,12 @@ environments:
     - envs/values.prd.yaml
     kubeContext: acs_prd
 ---
+# non ancora in uso per ora
+values:
+  - ingressDefaultAnnotations:
+      cert-manager.io/cluster-issuer: "my-internal-ca"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+
 
 repositories:
   - name: jetstack
@@ -242,18 +248,18 @@ releases:
       - longhorn-system/longhorn
       {{- end }}
 
-  # - name: keycloak
-  #   namespace: keycloak
-  #   chart: bitnami/keycloak
-  #   createNamespace: true
-  #   version: 24.7.5
-  #   installed: {{ .Values.installed.keycloak }}
-  #   values:
-  #     - various/keycloak-values.yaml.gotmpl
-  #   needs:
-  #     {{- if .Values.installed.longhorn }}
-  #     - longhorn-system/longhorn
-  #     {{- end }}
+  - name: keycloak
+    namespace: keycloak
+    chart: bitnami/keycloak
+    createNamespace: true
+    version: 24.7.5
+    installed: {{ .Values.installed.keycloak }}
+    values:
+      - various/keycloak-values.yaml.gotmpl
+    needs:
+      {{- if .Values.installed.longhorn }}
+      - longhorn-system/longhorn
+      {{- end }}
 
   - name: apisix
     namespace: ingress-apisix

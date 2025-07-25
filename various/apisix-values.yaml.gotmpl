@@ -21,7 +21,8 @@ dashboard:
 
 ingress:
   annotations:
-    cert-manager.io/cluster-issuer: "selfsigning-issuer"
+    cert-manager.io/cluster-issuer: "my-internal-ca"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
   tls:
     - hosts:
         - apisix-{{ .Environment.Name }}.pcdacs.local
