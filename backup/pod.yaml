@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: data-generator
+  namespace: backup-test
+spec:
+  containers:
+    - name: writer
+      image: busybox:1.36
+      command: ["/bin/sh", "-c", "echo 'Hello from my PVC! This data should be in the backup.' > /data/demofile.txt && tail -f /dev/null"]
+      volumeMounts:
+        - mountPath: /data
+          name: my-pvc-storage
+  volumes:
+    - name: my-pvc-storage
+      persistentVolumeClaim:
+        claimName: my-test-pvc

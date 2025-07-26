@@ -1,0 +1,8 @@
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: velero-ui.local
+      paths:
+        - path: /
+          pathType: Prefix

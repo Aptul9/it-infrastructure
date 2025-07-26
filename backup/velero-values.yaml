@@ -1,0 +1,35 @@
+initContainers:
+  - name: velero-plugin-for-aws
+    image: velero/velero-plugin-for-aws:v1.10.1
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+      - mountPath: /target
+        name: plugins
+        
+configuration:
+  defaultVolumesToFsBackup: true
+  backupStorageLocation:
+  - name: minio
+    provider: aws
+    bucket: velero
+    accessMode: ReadWrite
+    default: true
+    config:
+      region: us-east-1
+      s3ForcePathStyle: true
+      s3Url: http://minio.minio-system.svc.cluster.local:9000
+      publicUrl: http://minio.minio-system.svc.cluster.local:9000
+  volumeSnapshotLocation:
+  - name: minio
+    provider: aws
+    config:
+      region: us-east-1
+      
+credentials:
+  useSecret: true
+  secretContents:
+    cloud: |
+      [default]
+      aws_access_key_id = taking-access-key
+      aws_secret_access_key = taking-secret-key
+deployNodeAgent: true

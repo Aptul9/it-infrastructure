@@ -1,0 +1,19 @@
+---
+apiVersion: velero.io/v1
+kind: Backup
+metadata:
+  name: my-first-crd-backup
+  # IMPORTANT: This resource must be created in the namespace where Velero is installed.
+  namespace: velero
+spec:
+  # We are telling Velero to back up all resources in the "backup-test" namespace.
+  includedNamespaces:
+    - backup-test
+
+  # If we don't specify this, Velero will try to backup this as Cloud Native Resource, with vendor lock-in.
+  defaultVolumesToFsBackup: true
+
+  storageLocation: minio
+
+  # TTL for backup Example format: 720h0m0s for 30 days.
+  # ttl: 720h0m0s

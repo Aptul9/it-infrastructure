@@ -1,0 +1,8 @@
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  name: my-pvc-restore
+  namespace: velero
+spec:
+  backupName: my-first-crd-backup
+# Velero already saves the namespace in the backup, so we don't need to specify it here.

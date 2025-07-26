@@ -1,0 +1,25 @@
+mode: standalone
+replicas: 1
+persistence:
+  size: 10Gi
+MINIO_REGION: us-east-1
+
+buckets:
+  - name: velero
+    policy: none
+    purge: false
+
+users:
+  - accessKey: taking-access-key
+    secretKey: taking-secret-key
+    policy: readwrite
+
+resources:
+  requests:
+    memory: 10Gi
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  hosts:
+    - minio.local
