@@ -15,7 +15,7 @@ ingress:
   hosts:
     - nexus-{{ .Environment.Name }}.pcdacs.local
   annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: "101m"
+    nginx.ingress.kubernetes.io/proxy-body-size: "500m"
 
 # opz per usare postgres esterno, controllare
 env:
