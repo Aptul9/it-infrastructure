@@ -1,3 +1,7 @@
 global:
   redis:
     password: ""
+
+master:
+  extraFlags:
+    - "--protected-mode no"
