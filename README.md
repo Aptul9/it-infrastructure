@@ -61,3 +61,48 @@ spec:
   imagePullSecrets:
   - name: harborpullsecret
 ```
+# Longhorn
+To be able to use ReadWriteMany on Longhorn we need to do the following steps:
+1. [Install NSF client](https://longhorn.io/docs/1.9.1/deploy/install/#installing-nfsv4-client): 
+```
+kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.9.1/deploy/prerequisite/longhorn-nfs-installation.yaml
+```
+Then we will be able to see the NSF pods:
+```
+kubectl -n longhorn-system get pod | grep longhorn-nfs-installation
+NAME                                  READY   STATUS    RESTARTS   AGE
+longhorn-nfs-installation-t2v9v   1/1     Running   0          143m
+longhorn-nfs-installation-7nphm   1/1     Running   0          143m
+```
+2. We now need to label our worker nodes:
+```
+kubectl label node pcd-sv-k8ns-w01 longhorn-role=worker
+kubectl label node pcd-sv-k8ns-w02 longhorn-role=worker
+kubectl label node pcd-sv-k8ns-w03 longhorn-role=worker
+```
+3. We can now create the new [StorageClass](https://longhorn.io/docs/1.9.1/nodes-and-volumes/volumes/rwx-volumes/#configuring-volume-locality-for-rwx-volumes):
+```
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: longhorn-rwx
+provisioner: driver.longhorn.io
+parameters:
+  shareManagerNodeSelector: longhorn-role:worker
+  migratable: "false"
+```
+
+4. We can now create the ReadWriteMany PVC and then mount it into the pods:
+```
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: longhorn-rwx-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: longhorn-rwx
+  resources:
+    requests:
+      storage: 1Gi
+```
