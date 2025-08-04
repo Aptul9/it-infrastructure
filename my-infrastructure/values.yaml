@@ -34,3 +34,6 @@ environment: dev
 
 minIOproxy:
   enabled: true
+
+createRoleForDevelopers:
+  enabled: true
