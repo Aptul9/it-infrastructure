@@ -231,23 +231,6 @@ releases:
     needs:
       - cert-manager/cert-manager
 
-  - name: nificluster
-    namespace: nifi
-    chart: oci://ghcr.io/konpyutaika/helm-charts/nifi-cluster
-    version: 1.11.1
-    createNamespace: true
-    wait: true
-    waitForJobs: true
-    installed: {{ .Values.installed.nifikop }}
-    values:
-      - dataflow/nificluster-values.yaml.gotmpl
-    needs:
-      - nifi/nifikop
-      - my-infrastructure/my-infrastructure
-      {{- if .Values.installed.longhorn }}
-      - longhorn-system/longhorn
-      {{- end }}
-
   - name: keycloak
     namespace: keycloak
     chart: bitnami/keycloak

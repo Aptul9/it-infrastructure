@@ -19,6 +19,7 @@ installed:
   elastic: true
   apisix: true
   minIOproxy: false
+  createRoleForDevelopers: true
 loadBalancerIpRange:
   start: 10.11.0.50
   end: 10.11.0.60
