@@ -37,3 +37,6 @@ minIOproxy:
 
 createRoleForDevelopers:
   enabled: true
+
+apisix:
+  enabled: true

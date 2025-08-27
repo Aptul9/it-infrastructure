@@ -1,0 +1,18 @@
+{{- if .Values.apisix.enabled }}
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  name: dashboard-route
+  namespace: ingress-apisix
+spec:
+  http:
+    - backends:
+        - serviceName: apisix-dashboard
+          servicePort: 80
+      match:
+        hosts:
+          - dashboard.apisix-{{ .Values.environment }}.pcdacs.local
+        paths:
+          - /*
+      name: dashboard-proxy
+{{- end }}

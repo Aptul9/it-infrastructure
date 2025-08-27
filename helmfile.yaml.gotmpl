@@ -175,7 +175,6 @@ releases:
     namespace: my-infrastructure
     createNamespace: true
     chart: ./my-infrastructure
-    # installed: {{ or .Values.installed.metalLB .Values.installed.datadog .Values.installed.rabbitMQ .Values.installed.nifikop}}
     installed: true
     wait: true
     waitForJobs: true
@@ -191,6 +190,9 @@ releases:
       {{- end }}
       {{- if .Values.installed.nifikop }}
       - nifi/nifikop 
+      {{- end }}
+      {{- if .Values.installed.apisix }}
+      - ingress-apisix/apisix
       {{- end }}
     values:
       - various/it-infrastructure-values.yaml.gotmpl

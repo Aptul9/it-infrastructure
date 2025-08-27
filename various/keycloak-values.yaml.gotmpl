@@ -10,27 +10,27 @@ postgresql:
 ingress:
   enabled: true
   ingressClassName: nginx
-  hostname: identity-pcd-dev.cultura.gov.it
+  hostname: identity-pcd-{{ .Environment.Name }}.cultura.gov.it
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     cert-manager.io/cluster-issuer: "my-internal-ca"
-    cert-manager.io/common-name: identity-pcd-dev.cultura.gov.it
+    cert-manager.io/common-name: identity-pcd-{{ .Environment.Name }}.cultura.gov.it
     cert-manager.io/subject-organizationalunits: ACS IT
     cert-manager.io/subject-organizations: ACS
   tls: true
   selfSigned: true
-adminIngress:
-  enabled: false
-  ingressClassName: nginx
-  hostname: mgnt-identity-pcd-dev.cultura.gov.it
-  annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    cert-manager.io/cluster-issuer: "my-internal-ca"
-    cert-manager.io/common-name: mgnt-identity-pcd-dev.cultura.gov.it
-    cert-manager.io/subject-organizationalunits: ACS IT
-    cert-manager.io/subject-organizations: ACS
-  tls: true
-  selfSigned: true
+# adminIngress:
+#   enabled: false
+#   ingressClassName: nginx
+#   hostname: mgnt-identity-pcd-{{ .Environment.Name }}.cultura.gov.it
+#   annotations:
+#     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+#     cert-manager.io/cluster-issuer: "my-internal-ca"
+#     cert-manager.io/common-name: mgnt-identity-pcd-{{ .Environment.Name }}.cultura.gov.it
+#     cert-manager.io/subject-organizationalunits: ACS IT
+#     cert-manager.io/subject-organizations: ACS
+#   tls: true
+#   selfSigned: true
 auth:
   adminUser: admin
   adminPassword: jfKEFOEwyF
