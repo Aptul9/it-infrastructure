@@ -16,3 +16,31 @@ spec:
           - /*
       name: dashboard-proxy
 {{- end }}
+---
+{{- if eq .Values.environment "prd" }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: ingress-apisix
+  name: apisix-dashboard-prd
+  annotations:
+    cert-manager.io/cluster-issuer: "my-internal-ca"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - dashboard.apisix-prd.pcdacs.local
+      secretName: apisix-dashboard-prd-tls
+  rules:
+    - host: dashboard.apisix-prd.pcdacs.local
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: apisix-gateway
+                port:
+                  number: 80
+{{- end }}

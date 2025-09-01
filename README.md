@@ -106,3 +106,9 @@ spec:
     requests:
       storage: 1Gi
 ```
+
+# Domains
+Currently the followings are the production exposed hostnames:
+- web-pcd.cultura.gov.it
+- identity-pcd.cultura.gov.it
+- apigw-pcd.cultura.gov.it

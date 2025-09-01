@@ -23,27 +23,29 @@ dashboard:
   enabled: {{ .Values | get "apisix.dashboardEnabled" "true" }}       
 
 ingress:
-  annotations:
-    cert-manager.io/cluster-issuer: "my-internal-ca"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-  tls:
-    - hosts:
-        - apisix-{{ .Environment.Name }}.pcdacs.local
-        - dashboard.apisix-{{ .Environment.Name }}.pcdacs.local
-        - apigw-pcd-{{ .Environment.Name }}.cultura.gov.it
-      secretName: apisix-tls
   enabled: true
   className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: {{ ternary "letsencrypt-prd" "my-internal-ca" (eq .Environment.Name "prd") }}
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  
+  tls:
+    - secretName: apisix-tls
+      hosts:
+        - apigw-pcd{{ if ne .Environment.Name "prd" }}-{{ .Environment.Name }}{{ end }}.cultura.gov.it
+        {{- if ne .Environment.Name "prd" }}
+        - dashboard.apisix-{{ .Environment.Name }}.pcdacs.local
+        {{- end }}
+
   hosts:
-    - host: apisix-{{ .Environment.Name }}.pcdacs.local
+    - host: apigw-pcd{{ if ne .Environment.Name "prd" }}-{{ .Environment.Name }}{{ end }}.cultura.gov.it
       paths: 
         - /
+    {{- if ne .Environment.Name "prd" }}
     - host: dashboard.apisix-{{ .Environment.Name }}.pcdacs.local
       paths: 
         - /
-    - host: apigw-pcd-{{ .Environment.Name }}.cultura.gov.it
-      paths: 
-        - /
+    {{- end }}
 
 apisix:
   nginx:
