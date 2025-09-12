@@ -22,7 +22,7 @@ gitlab:
       aws_secret_access_key: minioadmin123
       aws_signature_version: 4
       host: "10.186.0.121"
-      endpoint: "https://10.186.0.121:9000"
+      endpoint: "http://10.186.0.121:9000"
       path_style: true
 
 nexus:
