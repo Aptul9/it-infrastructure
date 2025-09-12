@@ -25,6 +25,7 @@ rabbitMQ:
   enabled: true
 
 nifi:
+  nodes: 2
   enabled: true
 
 secretpullnamespaces:

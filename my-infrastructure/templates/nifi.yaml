@@ -6,6 +6,10 @@ metadata:
   name: nifikop
   namespace: nifi
 spec:
+  {{- $nodeCount := .Values.nifi.nodes | default 1 | int -}}
+  {{- if lt $nodeCount 1 -}}
+    {{- fail "nifi.nodes must be greater than or equal to 1" -}}
+  {{- end }}
   clusterImage: apache/nifi:2.5.0
   nodeUserIdentityTemplate: node-%d-nifikop
   externalServices:
@@ -103,17 +107,18 @@ spec:
               requests:
                 storage: 1Gi
   nodes:
-    - id: 0
+    {{- range $i := until $nodeCount }}
+    - id: {{ $i }}
       labels:
         nifi_cr: nifikop
         nifi_node_group: default_group
       nodeConfigGroup: default_group
+    {{- end }}
   propagateLabels: false
   readOnlyConfig:
     bootstrapProperties:
       nifiJvmMemory: 3g
       overrideConfigs: |
-        # Java 8 Tuning see https://community.hortonworks.com/articles/7882/hdfnifi-best-practices-for-setting-up-a-high-perfo.html for references
         java.arg.7=-XX:ReservedCodeCacheSize=256m
         java.arg.8=-XX:+UseCodeCacheFlushing
     maximumTimerDrivenThreadCount: 40

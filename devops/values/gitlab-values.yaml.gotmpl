@@ -75,13 +75,33 @@ global:
     backups:
       bucket: gitlab-backups
       tmpBucket: tmp
+  # smtp:
+  #   # values from https://docs.gitlab.com/omnibus/settings/smtp/#outlook
+  #   enabled: true
+  #   address: smtp-mail.outlook.com
+  #   port: 587
+  #   user_name: "supportoacs@prismaprogetti.it"
+  #   password:
+  #     secret: "gitlab-smtp-secret"
+  #     key: "password"
+  #   authentication: "login"
+  #   starttls_auto: true
+  #   openssl_verify_mode: "peer"
+  # email:
+  #   from: "supportoacs@prismaprogetti.it"
+  #   display_name: "Supporto Acs"
+  #   reply_to: "supportoacs@prismaprogetti.it"
+
 
 gitlab:
   gitaly:
     persistence:
       storageClass: longhorn
       size: 10Gi
-
+  # auth:
+  #   token:
+  #     secret: gitaly-secret
+  #     key: token
 # kubectl create secret generic pgsql-secrets --from-literal=password=gitlab --namespace=gitlab
 # kubectl create secret generic gitlab-redis-secret --from-literal=redis-password=jfKEFOEwyF -n gitlab
 # kubectl create secret generic gitlab-rails-storage --from-file=connection=minio-secret.yaml -n gitlab
