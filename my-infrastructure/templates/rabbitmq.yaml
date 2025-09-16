@@ -4,39 +4,45 @@ kind: Namespace
 metadata:
   name: rabbit
 ---
-# per altri esempi su come configurare: https://github.com/rabbitmq/cluster-operator/tree/main/docs/examples
+# kubectl apply -f https://github.com/rabbitmq/cluster-operator/releases/latest/download/cluster-operator.yml
 apiVersion: rabbitmq.com/v1beta1
 kind: RabbitmqCluster
 metadata:
-  name: rabbitmqcluster
+  name: rabbitmq-cluster
   namespace: rabbit
 spec:
   replicas: 1
-  rabbitmq:
-    additionalConfig: |
-      default_user=admin
-      default_pass=password
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "1Gi"
+    limits:
+      cpu: "1"
+      memory: "2Gi"
+  persistence:
+    storageClassName: longhorn
+    storage: "1Gi"
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: rabbitmq-management
+  name: rabbitmq-dashboard-ingress
   namespace: rabbit
   annotations:
     cert-manager.io/cluster-issuer: "internal-ca"
 spec:
   ingressClassName: nginx
   rules:
-    - host: rabbitmq-console-{{ .Values.environment }}.pdcacs.local
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: rabbitmqcluster
-                port:
-                  number: 15672
+  - host: rabbitmq-console-{{ .Values.environment }}.pdcacs.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: my-rabbitmq-cluster
+            port:
+              number: 15672
   tls:
     - hosts:
         - rabbitmq-console-{{ .Values.environment }}.pdcacs.local

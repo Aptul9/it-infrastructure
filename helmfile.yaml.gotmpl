@@ -126,20 +126,20 @@ releases:
       - longhorn-system/longhorn
     {{- end }}
 
-  - name: rabbitmq
-    namespace: rabbitmq-operator
-    chart: bitnami/rabbitmq-cluster-operator
-    version: 4.3.25
-    installed: {{ .Values.installed.rabbitMQ }}
-    wait: true #necessario per my-infrastructure
-    waitForJobs: true
-    values:
-      - db-queues/rabbitmq-values.yaml.gotmpl
-    needs:
-      {{- if .Values.installed.longhorn }}
-      - longhorn-system/longhorn
-      {{- end }}
-      - cert-manager/cert-manager
+  # - name: rabbitmq
+  #   namespace: rabbitmq-operator
+  #   chart: bitnami/rabbitmq-cluster-operator
+  #   version: 4.3.25
+  #   installed: {{ .Values.installed.rabbitMQ }}
+  #   wait: true #necessario per my-infrastructure
+  #   waitForJobs: true
+  #   values:
+  #     - db-queues/rabbitmq-values.yaml.gotmpl
+  #   needs:
+  #     {{- if .Values.installed.longhorn }}
+  #     - longhorn-system/longhorn
+  #     {{- end }}
+  #     - cert-manager/cert-manager
 
   - name: redis
     namespace: cache
@@ -184,9 +184,6 @@ releases:
       {{- end }}
       {{- if .Values.installed.datadog }}
       - datadog/datadog-operator
-      {{- end }}
-      {{- if .Values.installed.rabbitMQ }}
-      - rabbitmq-operator/rabbitmq 
       {{- end }}
       {{- if .Values.installed.nifikop }}
       - nifi/nifikop 
