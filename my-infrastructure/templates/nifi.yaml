@@ -194,6 +194,9 @@ metadata:
     nginx.org/ssl-services: nifikop
     nginx.org/lb-method: ip_hash
     cert-manager.io/cluster-issuer: "internal-ca"
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: basic-auth
+    nginx.ingress.kubernetes.io/auth-realm: "Authentication Required"
 spec:
   ingressClassName: nginx
   rules:
