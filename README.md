@@ -112,3 +112,8 @@ Currently the followings are the production exposed hostnames:
 - web-pcd.cultura.gov.it
 - identity-pcd.cultura.gov.it
 - apigw-pcd.cultura.gov.it
+
+# Nifi
+For the authentication (to be written better):
+htpasswd -c auth admin
+kubectl create secret generic basic-auth --from-file=auth -n nifi

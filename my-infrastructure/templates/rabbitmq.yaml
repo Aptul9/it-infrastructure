@@ -40,7 +40,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: my-rabbitmq-cluster
+            name: rabbitmq-cluster
             port:
               number: 15672
   tls:
