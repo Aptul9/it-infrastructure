@@ -7,4 +7,4 @@ ingress:
     cert-manager.io/cluster-issuer: "my-internal-ca"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 defaultSettings:
-  defaultReplicaCount: {{ .Values.longhorn.volumeReplica }}
+  defaultReplicaCount: "{{ .Values.longhorn.volumeReplica }}"

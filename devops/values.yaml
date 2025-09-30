@@ -10,7 +10,7 @@ installed:
   gitlab: true
   argoCD: true
 longhorn:
-  volumeReplica: 1
+  volumeReplica: "1"
 loadBalancerIpRange:
   start: 10.186.0.50
   end: 10.186.0.60

@@ -21,7 +21,7 @@ spec:
       memory: "2Gi"
   persistence:
     storageClassName: longhorn
-    storage: "1Gi"
+    storage: "5Gi"
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
