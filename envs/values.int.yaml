@@ -33,3 +33,5 @@ keycloak:
     user: keycloak
     password: keycloak
     database: keycloak_int
+minIOproxy:
+  address: 10.3.0.11

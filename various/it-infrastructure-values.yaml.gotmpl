@@ -34,6 +34,7 @@ environment: {{ .Environment.Name }}
 
 minIOproxy:
   enabled: {{ .Values.installed.minIOproxy }}
+  address: {{ .Values.minIOproxy.address }}
 
 createRoleForDevelopers:
   enabled: {{ .Values.installed.createRoleForDevelopers }}

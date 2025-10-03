@@ -24,7 +24,7 @@ metadata:
   namespace: minio
 subsets:
   - addresses:
-      - ip: 10.3.0.11
+      - ip: {{ .Values.minIOproxy.address }}
     ports:
       - port: 9000
 ---
@@ -46,7 +46,7 @@ metadata:
   namespace: minio
 subsets:
   - addresses:
-      - ip: 10.3.0.11
+      - ip: {{ .Values.minIOproxy.address }}
     ports:
       - port: 9001
 ---
@@ -62,7 +62,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: minio-api-{{ .Values.environment }}.pdcacs.local
+    - host: file-pcd-api-{{ .Values.environment }}.cultura.gov.it
       http:
         paths:
           - path: /
@@ -74,7 +74,7 @@ spec:
                   number: 9000
   tls:
     - hosts:
-        - minio-api-{{ .Values.environment }}.pdcacs.local
+        - file-pcd-api-{{ .Values.environment }}.cultura.gov.it
       secretName: minio-api-tls
 ---
 apiVersion: networking.k8s.io/v1
@@ -88,7 +88,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: minio-console-{{ .Values.environment }}.pdcacs.local
+    - host: file-pcd-{{ .Values.environment }}.cultura.gov.it
       http:
         paths:
           - path: /
@@ -100,6 +100,6 @@ spec:
                   number: 9001
   tls:
     - hosts:
-        - minio-console-{{ .Values.environment }}.pdcacs.local
+        - file-pcd-{{ .Values.environment }}.cultura.gov.it
       secretName: minio-console-tls
 {{- end }}

@@ -2,7 +2,7 @@ ingress:
   enabled: true
   ingressClassName: "nginx"
   hosts:
-    - host: headlamp-int.pdcacs.local
+    - host: headlamp-int.pcdacs.local
       paths:
       - path: /
         type: ImplementationSpecific

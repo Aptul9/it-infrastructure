@@ -33,7 +33,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: rabbitmq-console-{{ .Values.environment }}.pdcacs.local
+  - host: rabbitmq-console-{{ .Values.environment }}.pcdacs.local
     http:
       paths:
       - path: /
@@ -45,6 +45,6 @@ spec:
               number: 15672
   tls:
     - hosts:
-        - rabbitmq-console-{{ .Values.environment }}.pdcacs.local
+        - rabbitmq-console-{{ .Values.environment }}.pcdacs.local
       secretName: rabbitmq-management-tls
 {{- end }}

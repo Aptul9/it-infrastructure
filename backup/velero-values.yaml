@@ -7,18 +7,21 @@ initContainers:
         name: plugins
         
 configuration:
+  features: EnableCSI
   defaultVolumesToFsBackup: true
   backupStorageLocation:
   - name: minio
     provider: aws
-    bucket: velero
+    bucket: k8s-devops
     accessMode: ReadWrite
     default: true
     config:
       region: us-east-1
       s3ForcePathStyle: true
-      s3Url: http://minio.minio-system.svc.cluster.local:9000
-      publicUrl: http://minio.minio-system.svc.cluster.local:9000
+      s3Url: https://minio-api-dev.pcdacs.local
+      publicUrl: https://minio-api-dev.pcdacs.local
+      # s3Url: https://pcd-dv-minio-c01.pcdacs.local:9000
+      # publicUrl: https://pcd-dv-minio-c01.pcdacs.local:9000
   volumeSnapshotLocation:
   - name: minio
     provider: aws
@@ -30,6 +33,10 @@ credentials:
   secretContents:
     cloud: |
       [default]
-      aws_access_key_id = taking-access-key
-      aws_secret_access_key = taking-secret-key
+      aws_access_key_id = admin
+      aws_secret_access_key = 873hasjdh1xV1ejkHsaLpA
+    # cloud: |
+    #   [default]
+    #   aws_access_key_id = minioadmin
+    #   aws_secret_access_key = 873hasjdh1xV1ejkHsaLpA
 deployNodeAgent: true

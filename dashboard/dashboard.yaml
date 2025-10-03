@@ -1,5 +1,5 @@
   ingress:
     enabled: true
     hosts:
-    - dashboard-int.pdcacs.local
+    - dashboard-int.pcdacs.local
     ingressClassName: nginx
